@@ -19,7 +19,9 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          sudo apt-get update && sudo apt-get install -y ffmpeg
+          pip install -r requirements.txt
 
       - name: Select today's book
         run: python scripts/select_book.py
@@ -39,9 +41,10 @@ jobs:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVEN_VOICE_ID: ${{ secrets.ELEVEN_VOICE_ID }}
 
+      - name: Generate visuals
+        run: python scripts/generate_visuals.py
+
       # --- next steps will plug in here, one at a time ---
-      # - name: Generate visuals
-      #   run: python scripts/generate_visuals.py
       # - name: Assemble video
       #   run: python scripts/assemble_video.py
       # - name: Generate thumbnail
