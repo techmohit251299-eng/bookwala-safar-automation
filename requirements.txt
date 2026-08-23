@@ -1,3 +1,4 @@
 anthropic
+elevenlabs
 
-# Later steps will add: elevenlabs, requests, ffmpeg-python, Pillow
+# Later steps will add: requests, ffmpeg-python, Pillow
