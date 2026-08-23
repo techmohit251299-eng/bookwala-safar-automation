@@ -27,6 +27,7 @@ SCRIPT_FILE = DATA_DIR / "script.json"
 VOICE_OUTPUT = OUTPUT_DIR / "voice.mp3"
 
 DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # placeholder — swap for your pick from ElevenLabs' voice library
+MAX_TEST_CHARS = 900  # safety cap (~120-150 words) so testing never burns credits on a long script by mistake
 
 
 def load_script():
@@ -85,6 +86,13 @@ def main():
     data = load_script()
     script_text = data["script"]
     voice_id = os.environ.get("ELEVEN_VOICE_ID", DEFAULT_VOICE_ID)
+
+    if data.get("mode") == "test" and len(script_text) > MAX_TEST_CHARS:
+        print(
+            f"[safety cap] test-mode script is {len(script_text)} chars, "
+            f"trimming to {MAX_TEST_CHARS} to avoid burning credits."
+        )
+        script_text = script_text[:MAX_TEST_CHARS]
 
     if os.environ.get("ELEVENLABS_API_KEY"):
         generate_with_elevenlabs(script_text, voice_id)
