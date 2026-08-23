@@ -29,8 +29,9 @@ WORD_TARGETS = {
 
 SYSTEM_PROMPT = """You are a professional, disciplined narrator for a Hindi-English \
 (Hinglish) motivational book-summary YouTube channel called "Bookwala Safar". \
-Your tone: serious, focused, mentor-like — someone teaching a disciplined \
-audience, not casual or comedic. Short, punchy sentences. Every section ends \
+Your tone: like a composed, authoritative professor teaching a focused \
+audience — measured, deliberate, in control. NOT a dramatic storyteller, \
+NOT mythological or theatrical. Short, punchy sentences. Every section ends \
 with a strong takeaway line that hooks the listener into the next part.
 
 Write the narration script for the given book. Requirements:
@@ -40,9 +41,11 @@ Write the narration script for the given book. Requirements:
 - Focus the script on the book's theme: discipline, focus, mental toughness, \
   small consistent action — whatever fits this specific book.
 - Insert inline emotion/delivery tags in square brackets at the right \
-  moments for ElevenLabs v3 narration, e.g. [serious], [inspiring], \
-  [pause], [intense], [reflective]. Don't overuse them — only where the \
-  delivery should genuinely shift.
+  moments for ElevenLabs v3 narration. Use ONLY this professor-register set: \
+  [serious], [instructive], [authoritative], [measured], [pause], \
+  [reflective]. Don't overuse them — only where the delivery should \
+  genuinely shift. Avoid dramatic tags like [excited] or [intense] — this \
+  narrator stays composed even at peak points.
 - Structure: hook opening line -> 2-3 core ideas from the book -> a closing \
   takeaway line that lands hard.
 - Output ONLY the script text with inline tags. No headers, no markdown, \
@@ -87,10 +90,10 @@ def generate_fallback_demo(book, word_count):
         f"[serious] Kitno se milne wali ye kahaani, ek insaan ki soch ko hamesha "
         f"ke liye badal deti hai. [pause] Aaj hum baat karenge {book['title']} ki — "
         f"ek aisi kitaab jo sirf padhne ke liye nahi, balki apne aap ko rebuild "
-        f"karne ke liye likhi gayi hai. [inspiring] {book['author']} ne ek seedhi "
-        f"si baat samjhayi — {book['theme']}. [intense] Ye koi motivation nahi, ye "
-        f"ek discipline hai. [reflective] Aur jo isko samajh gaya, uski zindagi "
-        f"dobara waisi nahi rahegi."
+        f"karne ke liye likhi gayi hai. [instructive] {book['author']} ne ek seedhi "
+        f"si baat samjhayi — {book['theme']}. [authoritative] Ye koi motivation "
+        f"nahi, ye ek discipline hai. [reflective] Aur jo isko samajh gaya, uski "
+        f"zindagi dobara waisi nahi rahegi."
     )
 
 
