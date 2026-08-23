@@ -1,0 +1,3 @@
+anthropic
+
+# Later steps will add: elevenlabs, requests, ffmpeg-python, Pillow

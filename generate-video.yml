@@ -1,0 +1,54 @@
+name: Generate Book Summary Video
+
+on:
+  schedule:
+    # Runs daily at 09:00 UTC (~2:30 PM IST). Change cron to adjust frequency.
+    - cron: "0 9 * * *"
+  workflow_dispatch: {}   # lets you trigger it manually from the Actions tab
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Select today's book
+        run: python scripts/select_book.py
+        env:
+          # Used later (step 2) if book selection uses an LLM to rank/pick
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Generate script
+        run: python scripts/generate_script.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SCRIPT_MODE: test   # switch to "full" once TTS/visuals are ready for 15-20 min runs
+
+      # --- next steps will plug in here, one at a time ---
+      # - name: Generate voiceover (ElevenLabs)
+      #   run: python scripts/generate_voice.py
+      # - name: Generate visuals
+      #   run: python scripts/generate_visuals.py
+      # - name: Assemble video
+      #   run: python scripts/assemble_video.py
+      # - name: Generate thumbnail
+      #   run: python scripts/generate_thumbnail.py
+      # - name: Publish to YouTube
+      #   run: python scripts/publish.py
+
+      - name: Commit updated book status
+        run: |
+          git config user.name "video-automation-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/books.json data/selected_book.json data/script.json
+          git commit -m "chore: mark book as used for $(date +'%Y-%m-%d')" || echo "Nothing to commit"
+          git push
