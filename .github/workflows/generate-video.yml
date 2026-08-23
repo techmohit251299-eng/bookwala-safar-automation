@@ -33,9 +33,13 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           SCRIPT_MODE: test   # switch to "full" once TTS/visuals are ready for 15-20 min runs
 
+      - name: Generate voiceover (ElevenLabs)
+        run: python scripts/generate_voice.py
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVEN_VOICE_ID: ${{ secrets.ELEVEN_VOICE_ID }}
+
       # --- next steps will plug in here, one at a time ---
-      # - name: Generate voiceover (ElevenLabs)
-      #   run: python scripts/generate_voice.py
       # - name: Generate visuals
       #   run: python scripts/generate_visuals.py
       # - name: Assemble video
@@ -49,6 +53,6 @@ jobs:
         run: |
           git config user.name "video-automation-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data/books.json data/selected_book.json data/script.json
+          git add data/books.json data/selected_book.json data/script.json output/
           git commit -m "chore: mark book as used for $(date +'%Y-%m-%d')" || echo "Nothing to commit"
           git push
