@@ -1,4 +1,4 @@
-name: Generate Book Summary Video
+name: Generate Book Script & Voice
 
 on:
   schedule:
@@ -19,9 +19,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          sudo apt-get update && sudo apt-get install -y ffmpeg
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Select today's book
         run: python scripts/select_book.py
@@ -33,7 +31,7 @@ jobs:
         run: python scripts/generate_script.py
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          SCRIPT_MODE: test   # switch to "full" once TTS/visuals are ready for 15-20 min runs
+          SCRIPT_MODE: full   # 10-12 min professional scripts
 
       - name: Generate voiceover (ElevenLabs)
         run: python scripts/generate_voice.py
@@ -41,21 +39,16 @@ jobs:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVEN_VOICE_ID: ${{ secrets.ELEVEN_VOICE_ID }}
 
-      - name: Generate visuals
-        run: python scripts/generate_visuals.py
-
-      # --- next steps will plug in here, one at a time ---
-      - name: Assemble video
-        run: python scripts/assemble_video.py
+      # Manual video editing in DaVinci/Premiere - script + voice only
       # - name: Generate thumbnail
       #   run: python scripts/generate_thumbnail.py
       # - name: Publish to YouTube
       #   run: python scripts/publish.py
 
-      - name: Commit updated book status
+      - name: Commit script & voice
         run: |
           git config user.name "video-automation-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data/books.json data/selected_book.json data/script.json output/
-          git commit -m "chore: mark book as used for $(date +'%Y-%m-%d')" || echo "Nothing to commit"
+          git add data/books.json data/selected_book.json data/script.json output/voice.mp3 output/voice.wav
+          git commit -m "chore: generated script & voice for $(date +'%Y-%m-%d')" || echo "Nothing to commit"
           git push
