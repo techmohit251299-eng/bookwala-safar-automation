@@ -1,67 +1,63 @@
 1
-00:00:00,000 --> 00:00:02,056
+00:00:00,000 --> 00:00:02,084
 Kitno se milne wali ye
 
 2
-00:00:02,056 --> 00:00:04,112
+00:00:02,084 --> 00:00:04,169
 kahaani, ek insaan ki soch
 
 3
-00:00:04,112 --> 00:00:06,169
+00:00:04,169 --> 00:00:06,254
 ko hamesha ke liye badal
 
 4
-00:00:06,169 --> 00:00:08,225
+00:00:06,254 --> 00:00:08,339
 deti hai. Aaj hum baat
 
 5
-00:00:08,225 --> 00:00:10,281
-karenge The Subtle Art of
+00:00:08,339 --> 00:00:10,423
+karenge Atomic Habits ki —
 
 6
-00:00:10,281 --> 00:00:12,338
-Not Giving a F*ck ki
+00:00:10,423 --> 00:00:12,508
+ek aisi kitaab jo sirf
 
 7
-00:00:12,338 --> 00:00:14,394
-— ek aisi kitaab jo
+00:00:12,508 --> 00:00:14,593
+padhne ke liye nahi, balki
 
 8
-00:00:14,394 --> 00:00:16,450
-sirf padhne ke liye nahi,
+00:00:14,593 --> 00:00:16,678
+apne aap ko rebuild karne
 
 9
-00:00:16,450 --> 00:00:18,507
-balki apne aap ko rebuild
+00:00:16,678 --> 00:00:18,762
+ke liye likhi gayi hai.
 
 10
-00:00:18,507 --> 00:00:20,563
-karne ke liye likhi gayi
+00:00:18,762 --> 00:00:20,847
+James Clear ne ek seedhi
 
 11
-00:00:20,563 --> 00:00:22,619
-hai. Mark Manson ne ek
+00:00:20,847 --> 00:00:22,932
+si baat samjhayi — focus,
 
 12
-00:00:22,619 --> 00:00:24,676
-seedhi si baat samjhayi —
+00:00:22,932 --> 00:00:25,017
+discipline, small consistent action. Ye
 
 13
-00:00:24,676 --> 00:00:26,732
-priorities, mental clarity. Ye koi
+00:00:25,017 --> 00:00:27,102
+koi motivation nahi, ye ek
 
 14
-00:00:26,732 --> 00:00:28,788
-motivation nahi, ye ek discipline
+00:00:27,102 --> 00:00:29,186
+discipline hai. Aur jo isko
 
 15
-00:00:28,788 --> 00:00:30,845
-hai. Aur jo isko samajh
+00:00:29,186 --> 00:00:31,271
+samajh gaya, uski zindagi dobara
 
 16
-00:00:30,845 --> 00:00:32,901
-gaya, uski zindagi dobara waisi
-
-17
-00:00:32,901 --> 00:00:33,724
-nahi rahegi.
+00:00:31,271 --> 00:00:32,522
+waisi nahi rahegi.
