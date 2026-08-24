@@ -1,63 +1,63 @@
 1
-00:00:00,000 --> 00:00:02,084
+00:00:00,000 --> 00:00:02,124
 Kitno se milne wali ye
 
 2
-00:00:02,084 --> 00:00:04,169
+00:00:02,124 --> 00:00:04,249
 kahaani, ek insaan ki soch
 
 3
-00:00:04,169 --> 00:00:06,254
+00:00:04,249 --> 00:00:06,374
 ko hamesha ke liye badal
 
 4
-00:00:06,254 --> 00:00:08,339
+00:00:06,374 --> 00:00:08,499
 deti hai. Aaj hum baat
 
 5
-00:00:08,339 --> 00:00:10,423
-karenge Atomic Habits ki —
+00:00:08,499 --> 00:00:10,624
+karenge Can't Hurt Me ki
 
 6
-00:00:10,423 --> 00:00:12,508
-ek aisi kitaab jo sirf
+00:00:10,624 --> 00:00:12,749
+— ek aisi kitaab jo
 
 7
-00:00:12,508 --> 00:00:14,593
-padhne ke liye nahi, balki
+00:00:12,749 --> 00:00:14,874
+sirf padhne ke liye nahi,
 
 8
-00:00:14,593 --> 00:00:16,678
-apne aap ko rebuild karne
+00:00:14,874 --> 00:00:16,999
+balki apne aap ko rebuild
 
 9
-00:00:16,678 --> 00:00:18,762
-ke liye likhi gayi hai.
+00:00:16,999 --> 00:00:19,124
+karne ke liye likhi gayi
 
 10
-00:00:18,762 --> 00:00:20,847
-James Clear ne ek seedhi
+00:00:19,124 --> 00:00:21,249
+hai. David Goggins ne ek
 
 11
-00:00:20,847 --> 00:00:22,932
-si baat samjhayi — focus,
+00:00:21,249 --> 00:00:23,374
+seedhi si baat samjhayi —
 
 12
-00:00:22,932 --> 00:00:25,017
-discipline, small consistent action. Ye
+00:00:23,374 --> 00:00:25,499
+mental toughness, pushing limits. Ye
 
 13
-00:00:25,017 --> 00:00:27,102
+00:00:25,499 --> 00:00:27,624
 koi motivation nahi, ye ek
 
 14
-00:00:27,102 --> 00:00:29,186
+00:00:27,624 --> 00:00:29,749
 discipline hai. Aur jo isko
 
 15
-00:00:29,186 --> 00:00:31,271
+00:00:29,749 --> 00:00:31,874
 samajh gaya, uski zindagi dobara
 
 16
-00:00:31,271 --> 00:00:32,522
+00:00:31,874 --> 00:00:33,149
 waisi nahi rahegi.
