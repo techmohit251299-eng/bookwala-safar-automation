@@ -24,13 +24,12 @@ jobs:
       - name: Select today's book
         run: python scripts/select_book.py
         env:
-          # Used later (step 2) if book selection uses an LLM to rank/pick
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Generate script
         run: python scripts/generate_script.py
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SCRIPT_MODE: full   # 10-12 min professional scripts
 
       - name: Generate voiceover (ElevenLabs)
