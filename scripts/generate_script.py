@@ -1,7 +1,7 @@
 """
 Step 2: Generate the narration script for the selected book.
 
-Reads data/selected_book.json, asks Claude to write a professional,
+Reads data/selected_book.json, asks Gemini to write a professional,
 disciplined-narrator style motivational script with inline emotion
 tags for ElevenLabs, and writes data/script.json.
 
@@ -65,8 +65,24 @@ def build_prompt(book, word_count):
     )
 
 
+def generate_with_gemini(book, word_count):
+    """Calls the Gemini API. Requires GEMINI_API_KEY to be set."""
+    import google.generativeai as genai
+
+    genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+    model = genai.GenerativeModel(
+        model_name="gemini-3.5-flash",
+        system_instruction=SYSTEM_PROMPT.format(word_count=word_count),
+    )
+    response = model.generate_content(build_prompt(book, word_count))
+    return response.text.strip()
+
+
 def generate_with_claude(book, word_count):
-    """Calls the Claude API. Requires ANTHROPIC_API_KEY to be set."""
+    """Calls the Claude API. Requires ANTHROPIC_API_KEY to be set.
+    Not used right now — kept here for when a paid card/payment
+    method is set up, since Claude gives noticeably better emotion
+    and human touch than Gemini for this narrator style."""
     import anthropic
 
     client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY from env
@@ -81,9 +97,8 @@ def generate_with_claude(book, word_count):
 
 def generate_fallback_demo(book, word_count):
     """
-    Offline placeholder so the pipeline can be test-run without an API key
-    or network access. Replace with a real Claude call in CI via
-    generate_with_claude() once ANTHROPIC_API_KEY is set as a secret.
+    Offline placeholder so the pipeline can be test-run without any
+    API key or network access.
     """
     return (
         f"[serious] Kitno se milne wali ye kahaani, ek insaan ki soch ko hamesha "
@@ -102,7 +117,9 @@ def main():
 
     book = load_selected_book()
 
-    if os.environ.get("ANTHROPIC_API_KEY"):
+    if os.environ.get("GEMINI_API_KEY"):
+        script_text = generate_with_gemini(book, word_count)
+    elif os.environ.get("ANTHROPIC_API_KEY"):
         script_text = generate_with_claude(book, word_count)
     else:
         script_text = generate_fallback_demo(book, word_count)
