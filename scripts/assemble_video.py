@@ -152,15 +152,37 @@ def extend_background(duration):
 
 
 def assemble(background_path, cover_path, audio_path):
+    """
+    New layout:
+    - Background: full screen
+    - Book cover: left side (scaled down)
+    - Waveform: right side (vertical strip, colorful)
+    - Social icons: bottom center (like, subscribe, share text)
+    - Captions: bottom-left, smaller font
+    """
     filter_complex = (
-        "[2:a]showwaves=s=800x120:mode=cline:colors=white:scale=lin[wave];"
-        "[0:v][wave]overlay=x=(main_w-overlay_w)/2:y=main_h-160[bg1];"
-        "[1:v]scale=380:-1[coverscaled];"
-        "[bg1][coverscaled]overlay=x=main_w-overlay_w-60:y=60[bg2];"
+        # Waveform on right side (width: 120px, full height) - colorful
+        "[2:a]showwaves=s=120x1080:mode=cline:colors=0xFF6B6B|0xFFFFFF|0x4ECDC4:scale=lin[wave];"
+        
+        # Book cover on left (smaller, width: 350px)
+        "[1:v]scale=350:-1[coverscaled];"
+        
+        # Background + book cover on left side
+        "[0:v][coverscaled]overlay=x=50:y=100[bg1];"
+        
+        # Add waveform on right side
+        "[bg1][wave]overlay=x=main_w-130:y=0[bg2];"
+        
+        # Add captions (smaller font, bottom-left) - halka chota
         f"[bg2]subtitles={CAPTIONS_FILE}:force_style="
-        "'FontName=Arial,FontSize=20,PrimaryColour=&HFFFFFF&,"
-        "OutlineColour=&H000000&,BorderStyle=1,Outline=2,"
-        "Alignment=2,MarginV=40'[vout]"
+        "'FontName=Arial,FontSize=13,PrimaryColour=&HFFFFFF&,"
+        "OutlineColour=&H000000&,BorderStyle=1,Outline=1,"
+        "Alignment=1,MarginL=50,MarginV=90'[bg3];"
+        
+        # Add social media icons text at bottom center
+        "[bg3]drawtext=text='👍 LIKE     🔔 SUBSCRIBE     ↗️ SHARE':"
+        "fontsize=14:fontcolor=white:x=(main_w-text_w)/2:y=main_h-40:"
+        "borderw=1:bordercolor=black[vout]"
     )
 
     cmd = [
@@ -172,6 +194,7 @@ def assemble(background_path, cover_path, audio_path):
         "-map", "[vout]",
         "-map", "2:a",
         "-c:v", "libx264",
+        "-preset", "fast",  # faster encoding
         "-c:a", "aac",
         "-shortest",
         str(FINAL_VIDEO),
@@ -180,25 +203,45 @@ def assemble(background_path, cover_path, audio_path):
 
 
 def main():
-    book = load_json(SELECTED_FILE)
-    script_data = load_json(SCRIPT_FILE)
-    audio_path = find_voice_file()
-
-    duration = get_audio_duration(audio_path)
-    clean_text = strip_tags(script_data["script"])
-    build_captions(clean_text, duration)
-
     try:
-        fetch_book_cover(book)
-        print(f"Book cover fetched for: {book['title']}")
+        book = load_json(SELECTED_FILE)
+        print(f"[LOG] Loaded book: {book['title']}")
+        
+        script_data = load_json(SCRIPT_FILE)
+        print(f"[LOG] Loaded script")
+        
+        audio_path = find_voice_file()
+        print(f"[LOG] Found audio: {audio_path}")
+        
+        duration = get_audio_duration(audio_path)
+        print(f"[LOG] Audio duration: {duration} seconds")
+        
+        clean_text = strip_tags(script_data["script"])
+        print(f"[LOG] Script cleaned, {len(clean_text)} chars")
+        
+        build_captions(clean_text, duration)
+        print(f"[LOG] Captions built: {CAPTIONS_FILE}")
+        
+        try:
+            fetch_book_cover(book)
+            print(f"[LOG] Book cover fetched: {COVER_IMAGE}")
+        except Exception as e:
+            print(f"[WARNING] Google Books fetch failed ({e}), using placeholder cover.")
+            fetch_cover_fallback(book)
+            print(f"[LOG] Placeholder cover created: {COVER_IMAGE}")
+
+        extended_bg = extend_background(duration)
+        print(f"[LOG] Extended background: {extended_bg}")
+        
+        print(f"[LOG] Starting ffmpeg assembly...")
+        assemble(extended_bg, COVER_IMAGE, audio_path)
+        print(f"[LOG] Final video ready: {FINAL_VIDEO}")
+        
     except Exception as e:
-        print(f"[warning] Google Books fetch failed ({e}), using placeholder cover.")
-        fetch_cover_fallback(book)
-
-    extended_bg = extend_background(duration)
-    assemble(extended_bg, COVER_IMAGE, audio_path)
-
-    print(f"Final video ready: {FINAL_VIDEO}")
+        print(f"[ERROR] {type(e).__name__}: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
 
 
 if __name__ == "__main__":
