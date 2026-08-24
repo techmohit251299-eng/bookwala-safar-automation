@@ -3,5 +3,6 @@ elevenlabs
 requests
 Pillow
 google-generativeai
+pydub
 
 # Later steps will add: ffmpeg-python (or subprocess ffmpeg calls, already used)
