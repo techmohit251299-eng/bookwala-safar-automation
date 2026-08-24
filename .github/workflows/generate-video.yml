@@ -2,9 +2,8 @@ name: Generate Book Script & Voice
 
 on:
   schedule:
-    # Runs daily at 09:00 UTC (~2:30 PM IST). Change cron to adjust frequency.
     - cron: "0 9 * * *"
-  workflow_dispatch: {}   # lets you trigger it manually from the Actions tab
+  workflow_dispatch: {}
 
 jobs:
   generate:
@@ -18,6 +17,9 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
       - name: Install dependencies
         run: pip install -r requirements.txt
 
@@ -30,7 +32,7 @@ jobs:
         run: python scripts/generate_script.py
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          SCRIPT_MODE: full   # 10-12 min professional scripts
+          SCRIPT_MODE: full
 
       - name: Generate voiceover (ElevenLabs)
         run: python scripts/generate_voice.py
