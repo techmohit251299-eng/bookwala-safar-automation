@@ -153,36 +153,41 @@ def extend_background(duration):
 
 def assemble(background_path, cover_path, audio_path):
     """
-    New layout:
+    Fixed layout:
     - Background: full screen
-    - Book cover: left side (scaled down)
-    - Waveform: right side (vertical strip, colorful)
-    - Social icons: bottom center (like, subscribe, share text)
-    - Captions: bottom-left, smaller font
+    - Book cover: left side
+    - Waveform: right side (colorful)
+    - Captions: CENTER BOTTOM with glow effect
+    - Social icons: bottom
     """
     filter_complex = (
-        # Waveform on right side (width: 120px, full height) - colorful
-        "[2:a]showwaves=s=120x1080:mode=cline:colors=0xFF6B6B|0xFFFFFF|0x4ECDC4:scale=lin[wave];"
+        # Waveform on right side (colorful)
+        "[2:a]showwaves=s=100x1080:mode=cline:colors=0xFF6B6B|0xFFFFFF|0x4ECDC4:scale=lin[wave];"
         
-        # Book cover on left (smaller, width: 350px)
+        # Book cover on left
         "[1:v]scale=350:-1[coverscaled];"
         
-        # Background + book cover on left side
+        # Background + book cover
         "[0:v][coverscaled]overlay=x=50:y=100[bg1];"
         
-        # Add waveform on right side
-        "[bg1][wave]overlay=x=main_w-130:y=0[bg2];"
+        # Add waveform on right
+        "[bg1][wave]overlay=x=main_w-110:y=0[bg2];"
         
-        # Add captions (smaller font, bottom-left) - halka chota
+        # Add captions (CENTERED, with glow/highlight)
+        # Positioned in middle-bottom area with proper styling
         f"[bg2]subtitles={CAPTIONS_FILE}:force_style="
-        "'FontName=Arial,FontSize=13,PrimaryColour=&HFFFFFF&,"
-        "OutlineColour=&H000000&,BorderStyle=1,Outline=1,"
-        "Alignment=1,MarginL=50,MarginV=90'[bg3];"
+        "'FontName=Arial,FontSize=16,FontWeight=bold,PrimaryColour=&HFFFFFF&,"
+        "SecondaryColour=&H00FFFF&,"  # Cyan highlight
+        "OutlineColour=&H000000&,BorderStyle=3,Outline=2.5,"
+        "Alignment=2,MarginL=100,MarginR=100,MarginV=100'[bg3];"
         
-        # Add social media icons text at bottom center
-        "[bg3]drawtext=text='👍 LIKE     🔔 SUBSCRIBE     ↗️ SHARE':"
-        "fontsize=14:fontcolor=white:x=(main_w-text_w)/2:y=main_h-40:"
-        "borderw=1:bordercolor=black[vout]"
+        # Add background box behind captions for better readability
+        "[bg3]drawbox=x=100:y=main_h-180:w=main_w-200:h=80:color=black@0.4:thickness=fill[bg4];"
+        
+        # Add social media icons at very bottom with glow
+        "[bg4]drawtext=text='👍  LIKE     🔔  SUBSCRIBE     ↗️  SHARE':"
+        "fontsize=16:fontcolor=yellow:x=(main_w-text_w)/2:y=main_h-45:"
+        "borderw=2:bordercolor=white[vout]"
     )
 
     cmd = [
@@ -194,7 +199,7 @@ def assemble(background_path, cover_path, audio_path):
         "-map", "[vout]",
         "-map", "2:a",
         "-c:v", "libx264",
-        "-preset", "fast",  # faster encoding
+        "-preset", "fast",
         "-c:a", "aac",
         "-shortest",
         str(FINAL_VIDEO),
