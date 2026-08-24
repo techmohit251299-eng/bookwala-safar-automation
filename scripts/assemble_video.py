@@ -153,41 +153,26 @@ def extend_background(duration):
 
 def assemble(background_path, cover_path, audio_path):
     """
-    Fixed layout:
-    - Background: full screen
-    - Book cover: left side
-    - Waveform: right side (colorful)
-    - Captions: CENTER BOTTOM with glow effect
-    - Social icons: bottom
+    Simplified layout - no complex overlays, just clean composition
     """
     filter_complex = (
-        # Waveform on right side (colorful)
-        "[2:a]showwaves=s=100x1080:mode=cline:colors=0xFF6B6B|0xFFFFFF|0x4ECDC4:scale=lin[wave];"
+        # Waveform on right (colorful)
+        "[2:a]showwaves=s=100x1080:mode=cline:colors=0xFF6B6B:scale=lin[wave];"
         
-        # Book cover on left
-        "[1:v]scale=350:-1[coverscaled];"
+        # Book cover on left (scaled)
+        "[1:v]scale=350:-1[cover];"
         
-        # Background + book cover
-        "[0:v][coverscaled]overlay=x=50:y=100[bg1];"
+        # Background + book cover left
+        "[0:v][cover]overlay=x=50:y=100[base];"
         
         # Add waveform on right
-        "[bg1][wave]overlay=x=main_w-110:y=0[bg2];"
+        "[base][wave]overlay=x=1800:y=0[with_wave];"
         
-        # Add captions (CENTERED, with glow/highlight)
-        # Positioned in middle-bottom area with proper styling
-        f"[bg2]subtitles={CAPTIONS_FILE}:force_style="
+        # Add captions (centered bottom)
+        f"[with_wave]subtitles={CAPTIONS_FILE}:force_style="
         "'FontName=Arial,FontSize=16,FontWeight=bold,PrimaryColour=&HFFFFFF&,"
-        "SecondaryColour=&H00FFFF&,"  # Cyan highlight
-        "OutlineColour=&H000000&,BorderStyle=3,Outline=2.5,"
-        "Alignment=2,MarginL=100,MarginR=100,MarginV=100'[bg3];"
-        
-        # Add background box behind captions for better readability
-        "[bg3]drawbox=x=100:y=main_h-180:w=main_w-200:h=80:color=black@0.4:thickness=fill[bg4];"
-        
-        # Add social media icons at very bottom with glow
-        "[bg4]drawtext=text='👍  LIKE     🔔  SUBSCRIBE     ↗️  SHARE':"
-        "fontsize=16:fontcolor=yellow:x=(main_w-text_w)/2:y=main_h-45:"
-        "borderw=2:bordercolor=white[vout]"
+        "OutlineColour=&H000000&,BorderStyle=1,Outline=2,"
+        "Alignment=2,MarginL=200,MarginR=200,MarginV=120'[vout]"
     )
 
     cmd = [
@@ -200,6 +185,7 @@ def assemble(background_path, cover_path, audio_path):
         "-map", "2:a",
         "-c:v", "libx264",
         "-preset", "fast",
+        "-crf", "23",
         "-c:a", "aac",
         "-shortest",
         str(FINAL_VIDEO),
