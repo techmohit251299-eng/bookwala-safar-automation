@@ -49,6 +49,6 @@ jobs:
         run: |
           git config user.name "video-automation-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data/books.json data/selected_book.json data/script.json output/voice.mp3 output/voice.wav
+          git add data/books.json data/selected_book.json data/script.json output/voice.mp3
           git commit -m "chore: generated script & voice for $(date +'%Y-%m-%d')" || echo "Nothing to commit"
           git push
