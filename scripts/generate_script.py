@@ -6,7 +6,6 @@ disciplined-narrator style motivational script with inline emotion
 tags for ElevenLabs, and writes data/script.json.
 
 Two modes, controlled by the SCRIPT_MODE env var:
-  test  -> ~120 words   (quick end-to-end pipeline testing)
   full  -> ~2400 words  (~15-20 min of narration at ~140-150 wpm)
 
 Emotion tags use ElevenLabs' inline audio-tag format (v3 models),
