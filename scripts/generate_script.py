@@ -75,7 +75,17 @@ def generate_with_gemini(book, word_count):
             system_instruction=SYSTEM_PROMPT.format(word_count=word_count),
         ),
     )
-    return response.text.strip()
+    script_text = response.text.strip()
+    
+    # ✅ Verification यहीं करो (function के अंदर)
+    print("[LOG] Verifying complete script...")
+    verification = client.models.generate_content(
+        model="models/gemini-3.5-flash",
+        contents=f"Check this script for spelling/grammar errors:\n\n{script_text}\n\nList ONLY errors if any",
+    )
+    print(f"[VERIFICATION]\n{verification.text}\n")
+    
+    return script_text
 def generate_with_claude(book, word_count):
     """Calls the Claude API. Requires ANTHROPIC_API_KEY to be set.
     Not used right now — kept here for when a paid card/payment
@@ -120,23 +130,6 @@ def main():
         script_text = generate_with_claude(book, word_count)
     else:
         script_text = generate_fallback_demo(book, word_count)
-    
-    # ↓ ADD YE (Verification)
-    output = {
-        "book_title": book["title"],
-        "mode": mode,
-        "target_words": word_count,
-        "script": script_text,
-    }
-    with open(SCRIPT_FILE, "w", encoding="utf-8") as f:
-        json.dump(output, f, indent=2, ensure_ascii=False)
-      # ONE TIME verification
-    print("[LOG] Verifying complete script...")
-    verification = client.models.generate_content(
-        model="gemini-3.5-flash",
-        contents=f"Check this script for spelling/grammar errors:\n\n{script_text}\n\nList ONLY errors if any, else say 'VERIFIED - No errors'"
-    )
-    print(f"[VERIFICATION]\n{verification.text}\n")
     
     print(f"Script generated ({mode} mode, target {word_count} words):\n")
     print(f"Script generated ({mode} mode, target {word_count} words):\n")
