@@ -62,18 +62,19 @@ def build_prompt(book, word_count):
         f"Theme: {book['theme']}\n\n"
         f"Write the narration script now, targeting {word_count} words."
     )
-
-
 def generate_with_gemini(book, word_count):
     """Calls the Gemini API. Requires GEMINI_API_KEY to be set."""
-    import google.genai as genai
+    from google import genai
     
-    genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-    model = genai.GenerativeModel(
-        model_name="gemini-3.5-flash",
-        system_instruction=SYSTEM_PROMPT.format(word_count=word_count),
+    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+    
+    response = client.models.generate_content(
+        model="models/gemini-3.5-flash",
+        contents=build_prompt(book, word_count),
+        config=genai.types.GenerateContentConfig(
+            system_instruction=SYSTEM_PROMPT.format(word_count=word_count),
+        ),
     )
-    response = model.generate_content(build_prompt(book, word_count))
     return response.text.strip()
 def generate_with_claude(book, word_count):
     """Calls the Claude API. Requires ANTHROPIC_API_KEY to be set.
