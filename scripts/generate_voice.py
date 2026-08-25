@@ -82,18 +82,18 @@ def generate_with_elevenlabs(script_text, voice_id):
     for idx, chunk in enumerate(chunks, start=1):
         print(f"  Generating chunk {idx}/{len(chunks)} ({len(chunk)} chars)...")
         audio_stream = client.text_to_speech.convert(
-            voice_id=voice_id,
-            output_format="mp3_44100_128",
-            text=chunk,
-            model_id="eleven_v3",  # natively reads inline emotion tags
-            voice_settings=VoiceSettings(
-               stability=0.60,           # Reduce (pehle 0.65)
-               similarity_boost=0.85,    # Reduce (pehle 0.8)
-               style=0.35,               # Increase (pehle 0.25)
-               use_speaker_boost=False,  # Change True se False
-               ),
-            ),
-        
+    voice_id=voice_id,
+    output_format="mp3_44100_128",
+    text=chunk,
+    model_id="eleven_v3",
+    voice_settings=VoiceSettings(
+        stability=0.60,
+        similarity_boost=0.85,
+        style=0.35,
+        use_speaker_boost=False,
+    ),
+)
+
         audio_bytes = b"".join(audio_stream)
         segment = AudioSegment.from_file(io.BytesIO(audio_bytes), format="mp3")
         combined += segment
