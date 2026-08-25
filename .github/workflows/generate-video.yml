@@ -35,14 +35,14 @@ jobs:
           SCRIPT_MODE: full
 
       - name: Generate voiceover (ElevenLabs)
-        run: python scripts/generate_voice.py
+        run: python generate_voice.py
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVEN_VOICE_ID: ${{ secrets.ELEVEN_VOICE_ID }}
 
       # Manual video editing in DaVinci/Premiere - script + voice only
       # - name: Generate thumbnail
-      #   run: python scripts/generate_thumbnail.py
+      #   run: python generate_thumbnail.py
       # - name: Publish to YouTube
       #   run: python scripts/publish.py
 
