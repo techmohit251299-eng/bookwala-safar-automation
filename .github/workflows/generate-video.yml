@@ -29,13 +29,13 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Generate script
-        run: python generate_script.py
+        run: python scripts/generate_script.py
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SCRIPT_MODE: full
 
       - name: Generate voiceover (ElevenLabs)
-        run: python generate_voice.py
+        run: python scripts/generate_voice.py
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVEN_VOICE_ID: ${{ secrets.ELEVEN_VOICE_ID }}
