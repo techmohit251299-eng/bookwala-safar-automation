@@ -64,9 +64,12 @@ def build_prompt(book, word_count):
     )
 
 
+import google.genai as genai
+
 def generate_with_gemini(book, word_count):
     """Calls the Gemini API. Requires GEMINI_API_KEY to be set."""
-import google.genai as genai
+    import google.genai as genai  ✅ यहीं रहे (बस package name change)
+    
     genai.configure(api_key=os.environ["GEMINI_API_KEY"])
     model = genai.GenerativeModel(
         model_name="gemini-3.5-flash",
@@ -74,8 +77,6 @@ import google.genai as genai
     )
     response = model.generate_content(build_prompt(book, word_count))
     return response.text.strip()
-
-
 def generate_with_claude(book, word_count):
     """Calls the Claude API. Requires ANTHROPIC_API_KEY to be set.
     Not used right now — kept here for when a paid card/payment
