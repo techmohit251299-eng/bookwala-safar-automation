@@ -87,10 +87,11 @@ def generate_with_elevenlabs(script_text, voice_id):
             text=chunk,
             model_id="eleven_v3",  # natively reads inline emotion tags
             voice_settings=VoiceSettings(
-                stability=0.65,       # higher = more controlled/consistent, less erratic — professor, not storyteller
-                similarity_boost=0.8, # stay close to the original voice character
-                style=0.25,           # low = composed delivery, not theatrical/exaggerated
-                use_speaker_boost=True,
+               stability=0.60,           # Reduce (pehle 0.65)
+               similarity_boost=0.85,    # Reduce (pehle 0.8)
+               style=0.35,               # Increase (pehle 0.25)
+               use_speaker_boost=False,  # Change True se False
+               ),
             ),
         )
         audio_bytes = b"".join(audio_stream)
