@@ -66,7 +66,7 @@ def build_prompt(book, word_count):
 
 def generate_with_gemini(book, word_count):
     """Calls the Gemini API. Requires GEMINI_API_KEY to be set."""
-    import google.generativeai as genai
+    import google.genai as genai
     
     genai.configure(api_key=os.environ["GEMINI_API_KEY"])
     model = genai.GenerativeModel(
