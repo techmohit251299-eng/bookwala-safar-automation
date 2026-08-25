@@ -111,28 +111,35 @@ def generate_fallback_demo(book, word_count):
 
 
 def main():
-    mode = os.environ.get("SCRIPT_MODE", "test")
-    word_count = WORD_TARGETS.get(mode, WORD_TARGETS["test"])
-
+    mode = os.environ.get("SCRIPT_MODE", "full")
+    word_count = WORD_TARGETS.get(mode, WORD_TARGETS["full"])
     book = load_selected_book()
-
+    
     if os.environ.get("GEMINI_API_KEY"):
         script_text = generate_with_gemini(book, word_count)
     elif os.environ.get("ANTHROPIC_API_KEY"):
         script_text = generate_with_claude(book, word_count)
     else:
         script_text = generate_fallback_demo(book, word_count)
-
+    
+    # ↓ ADD YE (Verification)
+    print("[LOG] Verifying script quality...")
+    import google.generativeai as genai
+    client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+    verification = client.models.generate_content(
+        model="gemini-3.5-flash",
+        contents=f"Check this script for spelling/grammar errors:\n\n{script_text}\n\nList errors only, else say 'VERIFIED - No errors'"
+    )
+    print(f"[VERIFICATION] {verification.text}\n")
+    
     output = {
         "book_title": book["title"],
         "mode": mode,
         "target_words": word_count,
         "script": script_text,
     }
-
     with open(SCRIPT_FILE, "w", encoding="utf-8") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
-
     print(f"Script generated ({mode} mode, target {word_count} words):\n")
     print(script_text)
 
