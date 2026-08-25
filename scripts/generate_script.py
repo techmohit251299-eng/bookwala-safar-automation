@@ -123,15 +123,6 @@ def main():
         script_text = generate_fallback_demo(book, word_count)
     
     # ↓ ADD YE (Verification)
-    print("[LOG] Verifying script quality...")
-    import google.generativeai as genai
-    client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
-    verification = client.models.generate_content(
-        model="gemini-3.5-flash",
-        contents=f"Check this script for spelling/grammar errors:\n\n{script_text}\n\nList errors only, else say 'VERIFIED - No errors'"
-    )
-    print(f"[VERIFICATION] {verification.text}\n")
-    
     output = {
         "book_title": book["title"],
         "mode": mode,
@@ -140,6 +131,15 @@ def main():
     }
     with open(SCRIPT_FILE, "w", encoding="utf-8") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
+      # ONE TIME verification
+    print("[LOG] Verifying complete script...")
+    verification = client.models.generate_content(
+        model="gemini-3.5-flash",
+        contents=f"Check this script for spelling/grammar errors:\n\n{script_text}\n\nList ONLY errors if any, else say 'VERIFIED - No errors'"
+    )
+    print(f"[VERIFICATION]\n{verification.text}\n")
+    
+    print(f"Script generated ({mode} mode, target {word_count} words):\n")
     print(f"Script generated ({mode} mode, target {word_count} words):\n")
     print(script_text)
 
