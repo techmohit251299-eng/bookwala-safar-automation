@@ -1,7 +1,7 @@
 """
 Step 3: Generate the narration voiceover with ElevenLabs.
 
-Reads data/script.json (written by generate_script.py) and sends the
+Reads data/script.json (written by generate_script_anthropic.py) and sends the
 script text — including the inline emotion tags like [serious],
 [pause], [inspiring] — to ElevenLabs' v3 model, which natively
 interprets those tags for delivery/emotion.
