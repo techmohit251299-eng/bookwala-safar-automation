@@ -1,7 +1,7 @@
 """
 Step 2: Generate the narration script for the selected book.
 
-Reads data/selected_book.json, asks Claudai to write a professional,
+Reads data/selected_book.json, asks Claude to write a professional,
 disciplined-narrator style motivational script with inline emotion
 tags for ElevenLabs, and writes data/script.json.
 
@@ -62,47 +62,48 @@ def build_prompt(book, word_count):
         f"Theme: {book['theme']}\n\n"
         f"Write the narration script now, targeting {word_count} words."
     )
+
+
 def generate_with_claude(book, word_count):
     """Calls the Claude API. Requires ANTHROPIC_API_KEY to be set."""
     import anthropic
 
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-
-    response = client.messages.create(
-        model="claude-sonnet-5",
-        max_tokens=8192,
-        system=SYSTEM_PROMPT.format(word_count=word_count),
-        messages=[
-            {"role": "user", "content": build_prompt(book, word_count)}
-        ],
-    )
-
-    return response.content[0].text
-    
-    # ✅ Verification यहीं करो (function के अंदर)
-    print("[LOG] Verifying complete script...")
-    verification = client.models.generate_content(
-        model="models/gemini-3.5-flash",
-        contents=f"Check this script for spelling/grammar errors:\n\n{script_text}\n\nList ONLY errors if any",
-    )
-    print(f"[VERIFICATION]\n{verification.text}\n")
-    
-    return script_text
-def generate_with_claude(book, word_count):
-    """Calls the Claude API. Requires ANTHROPIC_API_KEY to be set.
-    Not used right now — kept here for when a paid card/payment
-    method is set up, since Claude gives noticeably better emotion
-    and human touch than Gemini for this narrator style."""
-    import anthropic
-
     client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY from env
     response = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=4000,
+        model="claude-sonnet-5",
+        max_tokens=4096,
         system=SYSTEM_PROMPT.format(word_count=word_count),
         messages=[{"role": "user", "content": build_prompt(book, word_count)}],
     )
     return "".join(block.text for block in response.content if block.type == "text")
+
+
+def verify_script(script_text):
+    """
+    Quick spelling/grammar pass on the generated script using Claude.
+    Never raises — if verification itself fails, we just skip it so a
+    flaky check never breaks the whole pipeline.
+    """
+    try:
+        import anthropic
+
+        client = anthropic.Anthropic()
+        response = client.messages.create(
+            model="claude-sonnet-5",
+            max_tokens=1024,
+            messages=[{
+                "role": "user",
+                "content": (
+                    "Check this Hinglish narration script for spelling or "
+                    "grammar errors. List ONLY the errors, or say 'No errors "
+                    f"found':\n\n{script_text}"
+                ),
+            }],
+        )
+        result = "".join(b.text for b in response.content if b.type == "text")
+        print(f"[VERIFICATION]\n{result}\n")
+    except Exception as e:
+        print(f"[VERIFICATION] skipped due to error: {e}")
 
 
 def generate_fallback_demo(book, word_count):
@@ -125,17 +126,18 @@ def main():
     mode = os.environ.get("SCRIPT_MODE", "full")
     word_count = WORD_TARGETS.get(mode, WORD_TARGETS["full"])
     book = load_selected_book()
-    
-    if os.environ.get("GEMINI_API_KEY"):
-        script_text = generate_with_gemini(book, word_count)
-    elif os.environ.get("ANTHROPIC_API_KEY"):
+
+    if os.environ.get("ANTHROPIC_API_KEY"):
         script_text = generate_with_claude(book, word_count)
+        verify_script(script_text)
     else:
         script_text = generate_fallback_demo(book, word_count)
-    
-    print(f"Script generated ({mode} mode, target {word_count} words):\n")
+
     print(f"Script generated ({mode} mode, target {word_count} words):\n")
     print(script_text)
+
+    with open(SCRIPT_FILE, "w", encoding="utf-8") as f:
+        json.dump({"mode": mode, "script": script_text}, f, indent=2, ensure_ascii=False)
 
 
 if __name__ == "__main__":
