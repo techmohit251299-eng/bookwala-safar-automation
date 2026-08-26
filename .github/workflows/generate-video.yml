@@ -26,16 +26,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Select today's book
-        run: python scripts/select_book.py
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-
-      - name: Generate script
-        run: python scripts/generate_script.py
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          SCRIPT_MODE: full
+      
 
       - name: Generate Script & Voice
         run: python generate_script_anthropic.py
