@@ -7,7 +7,7 @@ script text — including the inline emotion tags like [serious],
 interprets those tags for delivery/emotion.
 
 ElevenLabs caps a single request at 5000 characters, so long scripts
-(~2400 words / ~13000-15000 chars in Hinglish) are split into chunks
+(~1600 words / ~8000-10000 chars in Hinglish) are split into chunks
 at sentence boundaries, each chunk is converted separately, and the
 resulting audio pieces are concatenated into one final file.
 
@@ -32,7 +32,7 @@ VOICE_OUTPUT = OUTPUT_DIR / "voice.mp3"
 
 DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # placeholder — swap for your pick from ElevenLabs' voice library
 MAX_TEST_CHARS = 900  # safety cap (~120-150 words) so testing never burns credits on a long script by mistake
-MAX_CHUNK_CHARS = 4500  # stay safely under ElevenLabs' 5000-char hard limit
+MAX_CHUNK_CHARS = 1600  # stay safely under ElevenLabs' 5000-char hard limit
 
 
 def load_script():
@@ -85,7 +85,7 @@ def generate_with_elevenlabs(script_text, voice_id):
     voice_id=voice_id,
     output_format="mp3_44100_128",
     text=chunk,
-    model_id="eleven_v3",
+    model_id="eleven_multilingual_v2",
     voice_settings=VoiceSettings(
         stability=0.60,
         similarity_boost=0.85,
