@@ -1,12 +1,12 @@
 """
 Step 2: Generate the narration script for the selected book.
 
-Reads data/selected_book.json, asks Gemini to write a professional,
+Reads data/selected_book.json, asks Claudai to write a professional,
 disciplined-narrator style motivational script with inline emotion
 tags for ElevenLabs, and writes data/script.json.
 
 Two modes, controlled by the SCRIPT_MODE env var:
-  full  -> ~2400 words  (~10-15 min of narration at ~140-150 wpm)
+  full  -> ~1500 words  (~8-10 min of narration at ~140-150 wpm)
 
 Emotion tags use ElevenLabs' inline audio-tag format (v3 models),
 e.g. [serious], [pause], [inspiring], [intense] — these get spoken
@@ -22,11 +22,11 @@ SELECTED_FILE = DATA_DIR / "selected_book.json"
 SCRIPT_FILE = DATA_DIR / "script.json"
 
 WORD_TARGETS = {
-    "full": 2400,
+    "full": 1500,
 }
 
 SYSTEM_PROMPT = """You are a professional, disciplined narrator for a Hindi-English \
-(Hinglish) motivational book-summary YouTube channel called "Mohit ARC". \
+(Hinglish) motivational book-summary YouTube channel called "Grow with Books". \
 Your tone: like a composed, authoritative professor teaching a focused \
 audience — measured, deliberate, in control. NOT a dramatic storyteller, \
 NOT mythological or theatrical. Short, punchy sentences. Every section ends \
@@ -62,20 +62,22 @@ def build_prompt(book, word_count):
         f"Theme: {book['theme']}\n\n"
         f"Write the narration script now, targeting {word_count} words."
     )
-def generate_with_gemini(book, word_count):
-    """Calls the Gemini API. Requires GEMINI_API_KEY to be set."""
-    from google import genai
-    
-    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-    
-    response = client.models.generate_content(
-        model="models/gemini-3.5-flash",
-        contents=build_prompt(book, word_count),
-        config=genai.types.GenerateContentConfig(
-            system_instruction=SYSTEM_PROMPT.format(word_count=word_count),
-        ),
+def generate_with_claude(book, word_count):
+    """Calls the Claude API. Requires ANTHROPIC_API_KEY to be set."""
+    import anthropic
+
+    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+
+    response = client.messages.create(
+        model="claude-sonnet-5",
+        max_tokens=8192,
+        system=SYSTEM_PROMPT.format(word_count=word_count),
+        messages=[
+            {"role": "user", "content": build_prompt(book, word_count)}
+        ],
     )
-    script_text = response.text.strip()
+
+    return response.content[0].text
     
     # ✅ Verification यहीं करो (function के अंदर)
     print("[LOG] Verifying complete script...")
