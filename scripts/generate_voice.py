@@ -6,15 +6,16 @@ script text — including the inline emotion tags like [serious],
 [pause], [inspiring] — to ElevenLabs' v3 model, which natively
 interprets those tags for delivery/emotion.
 
-ElevenLabs caps a single request at 5000 characters, so long scripts
-(~1600 words / ~8000-10000 chars in Hinglish) are split into chunks
-at sentence boundaries, each chunk is converted separately, and the
-resulting audio pieces are concatenated into one final file.
+ElevenLabs caps a single request at 5000 characters. Long scripts are
+split into smaller chunks (short takes reduce eleven_v3 instability)
+at sentence boundaries, each chunk is converted separately using the
+same seed for better cross-chunk consistency, and the resulting audio
+pieces are concatenated into one final file.
 
 Output: output/voice.mp3
 
 Env vars:
-  ELEVENLABS_API_KEY   required for a real call
+  ELEVENLABS_API_KEY   required — script fails clearly if not set
   ELEVEN_VOICE_ID       optional override (default below is a general-purpose
                          multilingual voice — browse the ElevenLabs voice
                          library and swap in a Hindi/Hinglish-friendly one
@@ -32,7 +33,8 @@ VOICE_OUTPUT = OUTPUT_DIR / "voice.mp3"
 
 DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # placeholder — swap for your pick from ElevenLabs' voice library
 MAX_TEST_CHARS = 900  # safety cap (~120-150 words) so testing never burns credits on a long script by mistake
-MAX_CHUNK_CHARS = 1600  # stay safely under ElevenLabs' 5000-char hard limit
+MAX_CHUNK_CHARS = 1800  # short takes reduce eleven_v3 instability/drift vs longer chunks
+VOICE_SEED = 42  # fixed seed across all chunks — best-effort consistency, not guaranteed
 
 
 def load_script():
@@ -82,17 +84,18 @@ def generate_with_elevenlabs(script_text, voice_id):
     for idx, chunk in enumerate(chunks, start=1):
         print(f"  Generating chunk {idx}/{len(chunks)} ({len(chunk)} chars)...")
         audio_stream = client.text_to_speech.convert(
-    voice_id=voice_id,
-    output_format="mp3_44100_128",
-    text=chunk,
-    model_id="eleven_multilingual_v2",
-    voice_settings=VoiceSettings(
-        stability=0.60,
-        similarity_boost=0.85,
-        style=0.35,
-        use_speaker_boost=False,
-    ),
-)
+            voice_id=voice_id,
+            output_format="mp3_44100_128",
+            text=chunk,
+            model_id="eleven_v3",
+            seed=VOICE_SEED,
+            voice_settings=VoiceSettings(
+                stability=0.60,
+                similarity_boost=0.85,
+                style=0.35,
+                use_speaker_boost=False,
+            ),
+        )
 
         audio_bytes = b"".join(audio_stream)
         segment = AudioSegment.from_file(io.BytesIO(audio_bytes), format="mp3")
@@ -103,29 +106,6 @@ def generate_with_elevenlabs(script_text, voice_id):
 
     OUTPUT_DIR.mkdir(exist_ok=True)
     combined.export(VOICE_OUTPUT, format="mp3", bitrate="128k")
-
-
-def generate_fallback_demo(script_text):
-    """
-    Offline placeholder (silent audio) so the pipeline can be test-run
-    without an ELEVENLABS_API_KEY or network access. Replace with the
-    real call by setting the ELEVENLABS_API_KEY secret in CI.
-    """
-    import wave
-
-    OUTPUT_DIR.mkdir(exist_ok=True)
-    # rough estimate: ~150 words/min -> ~0.4s per word, for a silent placeholder
-    word_count = len(script_text.split())
-    duration_seconds = max(2, round(word_count * 0.4))
-
-    placeholder_path = OUTPUT_DIR / "voice.wav"
-    with wave.open(str(placeholder_path), "w") as wav_file:
-        wav_file.setnchannels(1)
-        wav_file.setsampwidth(2)
-        wav_file.setframerate(16000)
-        wav_file.writeframes(b"\x00\x00" * 16000 * duration_seconds)
-
-    print(f"[offline demo] wrote {duration_seconds}s silent placeholder to {placeholder_path}")
 
 
 def main():
@@ -140,11 +120,14 @@ def main():
         )
         script_text = script_text[:MAX_TEST_CHARS]
 
-    if os.environ.get("ELEVENLABS_API_KEY"):
-        generate_with_elevenlabs(script_text, voice_id)
-        print(f"Voice generated: {VOICE_OUTPUT}")
-    else:
-        generate_fallback_demo(script_text)
+    if not os.environ.get("ELEVENLABS_API_KEY"):
+        raise RuntimeError(
+            "ELEVENLABS_API_KEY is not set — cannot generate voice. "
+            "Set the secret and re-run."
+        )
+
+    generate_with_elevenlabs(script_text, voice_id)
+    print(f"Voice generated: {VOICE_OUTPUT}")
 
 
 if __name__ == "__main__":
