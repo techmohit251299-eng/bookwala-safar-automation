@@ -28,12 +28,22 @@ jobs:
 
       
 
-      - name: Generate Script & Voice
-        run: python generate_script_anthropic.py
+            # STEP 1: Select book
+      - name: Select book from rotation
+        run: python scripts/select_book.py
+
+      # STEP 2: Generate script
+      - name: Generate script with Claude
+        run: python scripts/generate_script_anthropic.py
         env:
-         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-         ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-         ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      # STEP 3: Generate voice
+      - name: Generate voice with ElevenLabs
+        run: python scripts/generate_voice.py
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
 
       # Manual video editing in DaVinci/Premiere - script + voice only
       # - name: Generate thumbnail
