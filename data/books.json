@@ -5,10 +5,15 @@
     "theme": "small consistent actions, compound growth, discipline",
     "youtube_viability": "High",
     "caption_style": "short emotional",
-    "keywords": ["habits", "discipline", "self-improvement", "productivity"],
+    "keywords": [
+      "habits",
+      "discipline",
+      "self-improvement",
+      "productivity"
+    ],
     "hashtags": "#atomichabits #habits #selfdevelopment #discipline #motivation",
     "description": "1% daily improvement compounds into 37x better results. Massively viral for motivation + actionable tips.",
-    "used": false
+    "used": true
   },
   {
     "title": "Deep Work",
@@ -16,7 +21,12 @@
     "theme": "focus, distraction-free work, meaningful productivity",
     "youtube_viability": "High",
     "caption_style": "long thoughtful",
-    "keywords": ["deep work", "focus", "productivity", "concentration"],
+    "keywords": [
+      "deep work",
+      "focus",
+      "productivity",
+      "concentration"
+    ],
     "hashtags": "#deepwork #focus #productivity #concentration #mindfulness",
     "description": "In age of constant distraction, deep focused work is rare skill. Trending heavily among students and professionals.",
     "used": false
@@ -27,7 +37,12 @@
     "theme": "counterintuitive living, priorities, mental health",
     "youtube_viability": "High",
     "caption_style": "short casual honest",
-    "keywords": ["priorities", "life values", "mental health", "boundaries"],
+    "keywords": [
+      "priorities",
+      "life values",
+      "mental health",
+      "boundaries"
+    ],
     "hashtags": "#subtleart #priorities #mentalhealthmatters #realtalk #lifeadvice",
     "description": "Viral for refreshingly honest take on life. Cuts through toxic motivation culture. Gen Z loves counter-narrative approach.",
     "used": false
@@ -38,7 +53,13 @@
     "theme": "purpose, suffering, resilience, meaning in life",
     "youtube_viability": "High",
     "caption_style": "long emotional reflective",
-    "keywords": ["purpose", "meaning", "resilience", "suffering", "philosophy"],
+    "keywords": [
+      "purpose",
+      "meaning",
+      "resilience",
+      "suffering",
+      "philosophy"
+    ],
     "hashtags": "#meaningoflife #purpose #resilience #philosophy #stoicism",
     "description": "Holocaust survivor's philosophy. Deep, emotional content. Perfect for late-night motivational videos. High watch time.",
     "used": false
@@ -49,7 +70,13 @@
     "theme": "growth mindset vs fixed mindset, learning, potential",
     "youtube_viability": "High",
     "caption_style": "short motivational",
-    "keywords": ["mindset", "growth", "learning", "potential", "psychology"],
+    "keywords": [
+      "mindset",
+      "growth",
+      "learning",
+      "potential",
+      "psychology"
+    ],
     "hashtags": "#growthmindset #mindset #learning #potential #psychology",
     "description": "Psychological research backing personal growth. Teachers and students love this. Educational + motivational combo = viral.",
     "used": false
@@ -60,7 +87,13 @@
     "theme": "social dynamics, power, influence, human nature",
     "youtube_viability": "High",
     "caption_style": "short dramatic storytelling",
-    "keywords": ["power", "influence", "social dynamics", "psychology", "strategy"],
+    "keywords": [
+      "power",
+      "influence",
+      "social dynamics",
+      "psychology",
+      "strategy"
+    ],
     "hashtags": "#powerofinfluence #psychology #humanbehavior #strategy #socialdynamics",
     "description": "Controversial but addictive. Each law makes people think differently. TikTok and YouTube explosion. Dark but engaging.",
     "used": false
@@ -71,7 +104,13 @@
     "theme": "mental toughness, extreme discipline, pushing limits",
     "youtube_viability": "High",
     "caption_style": "short intense motivational",
-    "keywords": ["discipline", "mental toughness", "challenge", "extreme", "willpower"],
+    "keywords": [
+      "discipline",
+      "mental toughness",
+      "challenge",
+      "extreme",
+      "willpower"
+    ],
     "hashtags": "#mentaltoughness #discipline #motivation #canthurtme #extremetraining",
     "description": "Navy SEAL's raw story. Workout videos + motivation trending massively. Gym bros and motivation seekers flood comments.",
     "used": false
@@ -82,7 +121,13 @@
     "theme": "cognitive biases, decision-making, psychology, human behavior",
     "youtube_viability": "Medium",
     "caption_style": "long analytical",
-    "keywords": ["psychology", "cognition", "biases", "decision-making", "behavior"],
+    "keywords": [
+      "psychology",
+      "cognition",
+      "biases",
+      "decision-making",
+      "behavior"
+    ],
     "hashtags": "#psychology #cognitivebias #decisionmaking #thinking #neuroscience",
     "description": "Deep psychological insights. Trending among intellectuals. Requires patient viewers but very high engagement quality.",
     "used": false
@@ -93,7 +138,13 @@
     "theme": "present moment, mindfulness, spiritual growth, anxiety reduction",
     "youtube_viability": "High",
     "caption_style": "long spiritual reflective",
-    "keywords": ["mindfulness", "spirituality", "presence", "anxiety", "inner peace"],
+    "keywords": [
+      "mindfulness",
+      "spirituality",
+      "presence",
+      "anxiety",
+      "inner peace"
+    ],
     "hashtags": "#thepowerofnow #mindfulness #spirituality #innerpeace #meditation",
     "description": "Meditation community loves this. Trending for anxiety relief. Aesthetic visuals + calm narration = algorithm gold.",
     "used": false
@@ -104,7 +155,13 @@
     "theme": "productivity, character, principles, effectiveness",
     "youtube_viability": "High",
     "caption_style": "short practical step-by-step",
-    "keywords": ["productivity", "habits", "effectiveness", "success", "principles"],
+    "keywords": [
+      "productivity",
+      "habits",
+      "effectiveness",
+      "success",
+      "principles"
+    ],
     "hashtags": "#7habits #productivity #success #personaldevelopment #effectiveness",
     "description": "Timeless classic. Used in corporate training. Trending for career + personal growth. Professionals keep rewatching.",
     "used": false
