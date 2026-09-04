@@ -11,50 +11,55 @@ permissions:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
+      
       - name: Install ffmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
-
+      
       - name: Install dependencies
         run: pip install -r requirements.txt
-
       
-
-            # STEP 1: Select book
+      # STEP 1: Select book
       - name: Select book from rotation
         run: python scripts/select_book.py
-
+      
       # STEP 2: Generate script
       - name: Generate script with Claude
         run: python scripts/generate_script_anthropic.py
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-
+      
       # STEP 3: Generate voice
       - name: Generate voice with ElevenLabs
         run: python scripts/generate_voice.py
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
-
-      # Manual video editing in DaVinci/Premiere - script + voice only
-      # - name: Generate thumbnail
-      #   run: python generate_thumbnail.py
-      # - name: Publish to YouTube
-      #   run: python scripts/publish.py
-
+      
+      # STEP 4: Upload artifacts
+      - name: Upload script & voice
+        uses: actions/upload-artifact@v4
+        with:
+          name: book-summary-output
+          path: |
+            data/selected_book.json
+            data/script.json
+            output/voice.mp3
+          retention-days: 30
+      
+      # STEP 5: Commit & push
       - name: Commit script & voice
         run: |
           git config user.name "video-automation-bot"
           git config user.email "bot@users.noreply.github.com"
           git add data/books.json data/selected_book.json data/script.json output/voice.mp3
-          git commit -m "chore: generated script & voice for $(date +'%Y-%m-%d')" || echo "Nothing to commit"
-          git push
+          git commit -m "📚 Script & Voice Generated - $(date +'%Y-%m-%d')" || echo "Nothing to commit"
+          git push origin main
