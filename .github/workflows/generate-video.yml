@@ -1,388 +1,60 @@
-"""
-ULTIMATE Script Generation for "Grow with Books" - 2M Subscriber Channel
-
-Uses ALL book data fields:
-- title, author, theme
-- description (why it's viral)
-- keywords (SEO optimization)
-- hashtags (YouTube optimization)
-- caption_style (tone guidance)
-- youtube_viability (quality bar)
-
-Output: Premium, powerful, keyword-optimized script
-"""
-
-import json
-import os
-from pathlib import Path
-
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-SELECTED_FILE = DATA_DIR / "selected_book.json"
-SCRIPT_FILE = DATA_DIR / "script.json"
-
-WORD_TARGETS = {
-    "full": 2000,
-}
-
-SYSTEM_PROMPT = """You are the PREMIUM script writer for "Grow with Books" — a 2M subscriber YouTube channel \
-in India focused on powerful book summaries, personal transformation, and deep thinking.
-
-YOUR MISSION: Create BROADCAST-QUALITY Hinglish scripts that viewers can't stop watching.
-
-TONE & DELIVERY:
-- Like a composed, authoritative mentor (not a dramatic storyteller)
-- Measured confidence, zero theatrics
-- Every word purposeful
-- Magnetic and compelling
-
-═══════════════════════════════════════════════════════════════
-
-**CRITICAL: USE ALL PROVIDED DATA FIELDS**
-
-📚 BOOK DATA YOU'LL RECEIVE:
-- title: Book name
-- author: Author name
-- theme: Core message/philosophy
-- description: Why this book is viral (use this for context!)
-- keywords: SEO keywords to naturally weave in
-- hashtags: YouTube hashtags (reference these!)
-- caption_style: Tone guidance (short emotional? long thoughtful? casual honest?)
-- youtube_viability: High/Medium/Low (match this energy level)
-
-INSTRUCTIONS FOR EACH FIELD:
-
-1. **DESCRIPTION** (Most Important!)
-   - This tells you WHY the book resonates
-   - Use this insight to shape your narrative
-   - Example: "1% daily improvement compounds into 37x better results"
-   - Make the script PROVE this description is true
-
-2. **KEYWORDS** (Weave naturally!)
-   - Don't force them - integrate organically
-   - Use 3-4 main keywords, 2-3 times each
-   - Example: If keyword is "discipline" - mention it, don't just imply
-   - Keywords = listener search terms - RESPECT THEM
-
-3. **HASHTAGS** (Reference in script!)
-   - Mention 2-3 hashtags naturally in closing
-   - Example: "Follow #AtomicHabits philosophy..."
-   - This increases discoverability
-
-4. **CAPTION_STYLE** (Match the tone!)
-   - "short emotional" = Quick punchy lines, emotional resonance
-   - "long thoughtful" = Deep sentences, philosophical, reflective
-   - "short casual honest" = Conversational, no BS, direct
-   - Adjust your sentence structure + vocabulary accordingly
-
-5. **YOUTUBE_VIABILITY** (Match energy!)
-   - High = Make it VIRAL-WORTHY (hooks every 3-4 min, emotional peaks)
-   - Medium = Solid, engaging, good watch time
-   - Low = Focus on niche depth over mass appeal
-
-═══════════════════════════════════════════════════════════════
-
-**SCRIPT ARCHITECTURE:**
-
-[OPENING] (200 words)
-- Grab attention with description insight
-- Why THIS book, why NOW
-- Promise of transformation
-- Channel intro: "Grow with Books"
-
-[SECTION 1] (400 words)
-- First main insight from theme
-- Use keywords naturally
-- Real examples
-- Middle hook: "And here's where it gets powerful..."
-
-[SECTION 2] (400 words)
-- Second core idea
-- More keyword integration
-- Deeper examples
-- Another hook: "Most people miss this..."
-
-[SECTION 3] (400 words)
-- Third insight or transformation element
-- Practical application
-- Personal relevance
-- Hook: "This changes everything..."
-
-[CLOSING] (300 words)
-- Powerful summary
-- Call to action
-- Mention 2-3 hashtags naturally
-- Channel branding
-- Memorable final line
-
-═══════════════════════════════════════════════════════════════
-
-**HOOK FORMULA (Throughout Script):**
-
-✓ Opening: Intrigue + Question
-✓ Middle 1: "But here's the thing..."
-✓ Middle 2: "This is where it gets powerful..."
-✓ Middle 3: "Listen carefully..."
-✓ Closing: Inspiration + Action
-
-═══════════════════════════════════════════════════════════════
-
-**KEYWORD INTEGRATION STRATEGY:**
-
-Don't say: "This book teaches discipline."
-DO say: "When you develop DISCIPLINE like {book} shows, everything changes. DISCIPLINE becomes your superpower."
-
-Weave keywords into:
-- Opening question
-- Core examples
-- Transition lines
-- Closing message
-
-═══════════════════════════════════════════════════════════════
-
-**PRONUNCIATION & CLARITY:**
-
-- Roman Hindi (Hinglish) - easy to pronounce
-- Mark difficult words: "Aristotle (A-ris-tot-ul)"
-- Numbers as words: "5 lakh" not "500000"
-- Abbreviations spelled: "AI (Artificial Intelligence)"
-
-═══════════════════════════════════════════════════════════════
-
-**WHAT NOT TO DO:**
-
-❌ Generic, templated language
-❌ Forcing keywords awkwardly
-❌ Ignoring caption_style guidance
-❌ Missing the description's essence
-❌ Weak hooks or predictable patterns
-❌ Emotion tags ([serious], [pause]) - write clean text only
-❌ Unclear pronunciation or complex Sanskrit
-
-═══════════════════════════════════════════════════════════════
-
-**WRITE THE SCRIPT NOW:**
-
-Channel: "Grow with Books"
-Target: 2000 words
-Style: Match caption_style + youtube_viability
-Quality: 2M subscriber broadcast level
-Structure: Opening → 3 Core Sections → Powerful Closing
-Integration: Use ALL data fields naturally + keywords woven in + hashtags mentioned + description proven true
-
-Write with conviction. Make it undeniable. Make viewers feel they MUST read this book.
-
-GO.
-"""
-
-
-def load_selected_book():
-    """Load the book selected for today."""
-    with open(SELECTED_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def build_enhanced_prompt(book, word_count):
-    """Build prompt using ALL book fields."""
-    
-    # Format keywords as string
-    keywords_str = ", ".join(book.get('keywords', []))
-    
-    # Format hashtags
-    hashtags_str = book.get('hashtags', '')
-    
-    # Caption style guidance
-    caption_style = book.get('caption_style', 'short emotional')
-    
-    # Viability level
-    viability = book.get('youtube_viability', 'High')
-    
-    # Description (most important!)
-    description = book.get('description', 'Powerful book with transformative insights')
-    
-    prompt = (
-        f"BOOK DATA:\n"
-        f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-        f"Title: {book['title']}\n"
-        f"Author: {book['author']}\n"
-        f"Theme: {book['theme']}\n"
-        f"\nDescription (WHY IT'S VIRAL): {description}\n"
-        f"Keywords (Weave in): {keywords_str}\n"
-        f"Hashtags (Mention): {hashtags_str}\n"
-        f"Caption Style (Match tone): {caption_style}\n"
-        f"YouTube Viability: {viability} (Match energy level)\n"
-        f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-        f"TARGET: {word_count} words\n\n"
-        f"GENERATE THE SCRIPT:\n"
-        f"1. Prove the description is TRUE through your script\n"
-        f"2. Naturally weave in keywords 2-3 times each\n"
-        f"3. Match the caption_style in your tone\n"
-        f"4. Match the youtube_viability energy\n"
-        f"5. Include hooks throughout (not just opening)\n"
-        f"6. Mention hashtags naturally in closing\n"
-        f"7. Make it unmissable for 2M subscriber audience\n\n"
-        f"Write now. Make it POWERFUL."
-    )
-    
-    return prompt
-
-
-def generate_with_claude(book, word_count):
-    """Generate script using Claude with ALL book data."""
-    import anthropic
-
-    client = anthropic.Anthropic()
-    response = client.messages.create(
-        model="claude-sonnet-5",
-        max_tokens=4096,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": build_enhanced_prompt(book, word_count)}],
-    )
-    return "".join(block.text for block in response.content if block.type == "text")
-
-
-def verify_spelling_pronunciation(script_text, book):
-    """
-    Recheck script for:
-    1. Spelling errors in Hinglish
-    2. Pronunciation clarity
-    3. Keywords properly integrated
-    4. Hashtags mentioned
-    
-    Graceful error handling.
-    """
-    try:
-        import anthropic
-
-        client = anthropic.Anthropic()
-        keywords_str = ", ".join(book.get('keywords', []))
-        
-        response = client.messages.create(
-            model="claude-sonnet-5",
-            max_tokens=1500,
-            messages=[{
-                "role": "user",
-                "content": (
-                    "Quality check this Grow with Books script:\n\n"
-                    "CHECK FOR:\n"
-                    "1. ✓ Spelling errors in Hinglish\n"
-                    "2. ✓ Pronunciation clarity\n"
-                    f"3. ✓ Keywords integrated naturally: {keywords_str}\n"
-                    "4. ✓ Hashtags mentioned in closing\n"
-                    "5. ✓ No awkward phrasing or forced integration\n"
-                    "6. ✓ Broadcast quality (2M channel standard)\n\n"
-                    "List issues if any. If perfect, say 'PERFECT - Broadcast ready!'\n\n"
-                    f"SCRIPT (first 2000 chars):\n{script_text[:2000]}"
-                ),
-            }],
-        )
-        result = "".join(b.text for b in response.content if b.type == "text")
-        print(f"\n[✓ QUALITY CHECK]\n{result}\n")
-    except Exception as e:
-        print(f"[Quality check] Skipped: {e}")
-
-
-def verify_hook_quality(script_text):
-    """Verify hooks throughout script."""
-    try:
-        import anthropic
-
-        client = anthropic.Anthropic()
-        response = client.messages.create(
-            model="claude-sonnet-5",
-            max_tokens=1000,
-            messages=[{
-                "role": "user",
-                "content": (
-                    "Rate these hooks in the script (1-10 each):\n"
-                    "1. Opening hook (grabs attention)\n"
-                    "2. Middle hooks (every 3-4 min)\n"
-                    "3. Closing hook (memorable)\n"
-                    "4. Overall flow (natural, not forced)\n\n"
-                    "If any score <7, suggest ONE improvement.\n"
-                    f"SCRIPT:\n{script_text[:1500]}"
-                ),
-            }],
-        )
-        result = "".join(b.text for b in response.content if b.type == "text")
-        print(f"\n[✓ HOOK VERIFICATION]\n{result}\n")
-    except Exception as e:
-        print(f"[Hook check] Skipped: {e}")
-
-
-def generate_fallback_demo(book, word_count):
-    """Offline fallback script."""
-    keywords = ", ".join(book.get('keywords', ['inspiration']))
-    return (
-        f"Namaste! Grow with Books mein aapka swagat hai.\n\n"
-        f"Aaj hum baat karenge {book['title']} ke baare mein.\n\n"
-        f"{book.get('description', 'Ek powerful book jo aapka perspective badal dega.')}\n\n"
-        f"Ye sirf motivation nahi — ye ek system hai. Ek philosophy hai. Ek way of living.\n\n"
-        f"{book['author']} ne seekhaya hai ki real change kaise aata hai. "
-        f"Aur uska focus tha {book['theme']}.\n\n"
-        f"Toh shuru karte hain. Aaj ke baad {keywords} aapka hindi nahi rahega..."
-    )
-
-
-def main():
-    mode = os.environ.get("SCRIPT_MODE", "full")
-    word_count = WORD_TARGETS.get(mode, WORD_TARGETS["full"])
-    
-    # Load book
-    book = load_selected_book()
-    
-    print("╔════════════════════════════════════════════════════════╗")
-    print("║  GROW WITH BOOKS - PREMIUM SCRIPT GENERATION          ║")
-    print("╚════════════════════════════════════════════════════════╝\n")
-    
-    print(f"📚 Book: {book['title']}")
-    print(f"✍️  Author: {book['author']}")
-    print(f"🎯 Theme: {book['theme']}")
-    print(f"💬 Description: {book.get('description', 'N/A')}")
-    print(f"🔑 Keywords: {', '.join(book.get('keywords', []))}")
-    print(f"📌 Hashtags: {book.get('hashtags', 'N/A')}")
-    print(f"🎤 Caption Style: {book.get('caption_style', 'N/A')}")
-    print(f"⭐ Viability: {book.get('youtube_viability', 'High')}")
-    print(f"\n📊 Target: {word_count} words | Mode: {mode}")
-    print(f"🎬 Channel: Grow with Books\n")
-
-    # Generate
-    print("════════════════════════════════════════════════════════")
-    print("[STEP 1] Generating premium script...")
-    
-    if os.environ.get("ANTHROPIC_API_KEY"):
-        script_text = generate_with_claude(book, word_count)
-        
-        print("[STEP 2] Quality check (spelling, keywords, hashtags)...")
-        verify_spelling_pronunciation(script_text, book)
-        
-        print("[STEP 3] Verifying hook quality...")
-        verify_hook_quality(script_text)
-    else:
-        print("[OFFLINE MODE] Using fallback demo...")
-        script_text = generate_fallback_demo(book, word_count)
-
-    # Save
-    with open(SCRIPT_FILE, "w", encoding="utf-8") as f:
-        json.dump({
-            "mode": mode,
-            "book": book['title'],
-            "author": book['author'],
-            "theme": book['theme'],
-            "description": book.get('description', ''),
-            "keywords": book.get('keywords', []),
-            "hashtags": book.get('hashtags', ''),
-            "caption_style": book.get('caption_style', ''),
-            "youtube_viability": book.get('youtube_viability', 'High'),
-            "channel": "Grow with Books",
-            "script": script_text,
-            "word_count": len(script_text.split())
-        }, f, indent=2, ensure_ascii=False)
-
-    print(f"\n════════════════════════════════════════════════════════")
-    print(f"✅ Script generated: {SCRIPT_FILE}")
-    print(f"📊 Word count: {len(script_text.split())} / {word_count} target")
-    print(f"✨ Ready for voice generation!\n")
-
-
-if __name__ == "__main__":
-    main()
+name: Generate Book Script & Voice
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Select book from rotation
+        run: python scripts/select_book.py
+
+      - name: Generate script with Claude
+        run: python scripts/generate_script_anthropic.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Generate voice with ElevenLabs
+        run: python scripts/generate_voice.py
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
+
+      - name: Upload script & voice
+        uses: actions/upload-artifact@v4
+        with:
+          name: book-summary-output
+          path: |
+            data/selected_book.json
+            data/script.json
+            output/voice.mp3
+          retention-days: 30
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "video-automation-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/books.json data/selected_book.json data/script.json output/voice.mp3
+          git commit -m "📚 Script & Voice Generated - $(date +'%Y-%m-%d')" || echo "Nothing to commit"
+          git push origin main
