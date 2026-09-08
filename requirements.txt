@@ -4,5 +4,4 @@ requests
 Pillow
 google-genai
 pydub
-
-# Later steps will add: ffmpeg-python (or subprocess ffmpeg calls, already used)
+python-dotenv
