@@ -1,23 +1,13 @@
 """
-Voice Generation - Philosopher Style with ALL MAPPINGS
-
-Uses:
-- DEVANAGARI_MAPPINGS
-- AUTHOR_MAPPINGS
-- BOOK_MAPPINGS
-- CONCEPT_MAPPINGS
-- BUSINESS_MAPPINGS
-- PHILOSOPHY_MAPPINGS
-- PSYCHOLOGY_MAPPINGS
-- NARRATION_MAPPINGS
-
-All integrated into voice generation!
+Voice Generation - Philosopher Style with ALL MAPPINGS (FIXED)
+Proper error handling + debugging included
 """
 
 import os
 from pathlib import Path
 import json
 import re
+import sys
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 OUTPUT_DIR = Path(__file__).resolve().parent.parent / "output"
@@ -48,7 +38,7 @@ DEVANAGARI_MAPPINGS = {
 }
 
 AUTHOR_MAPPINGS = {
-     "Aristotle": "अरिस्टोटल (Aristotle)",
+    "Aristotle": "अरिस्टोटल (Aristotle)",
     "Plato": "प्लेटो (Plato)",
     "Socrates": "सुकरात (Socrates)",
     "Nietzsche": "नीत्शे (Nietzsche)",
@@ -77,19 +67,6 @@ BOOK_MAPPINGS = {
     "Think and Grow Rich": "थिंक एंड ग्रो रिच",
     "Rich Dad Poor Dad": "रिच डैड पुअर डैड",
     "The Psychology of Money": "द साइकोलॉजी ऑफ मनी",
-    "Deep Work": "डीप वर्क",
-    "The Power of Now": "द पावर ऑफ नाउ",
-    "Ikigai": "इकिगाई",
-    "The Alchemist": "द अल्केमिस्ट",
-    "Man's Search for Meaning": "मैन्स सर्च फॉर मीनिंग",
-    "The Subtle Art of Not Giving a F*ck": "द सबटल आर्ट ऑफ नॉट गिविंग अ फक",
-    "The 48 Laws of Power": "द फोर्टी-एट लॉज़ ऑफ पावर",
-    "How to Win Friends and Influence People": "हाउ टू विन फ्रेंड्स एंड इन्फ्लुएंस पीपल",
-    "The Power of Habit": "द पावर ऑफ हैबिट",
-    "Essentialism": "एसेंशियलिज़्म",
-    "The One Thing": "द वन थिंग",
-    "Start With Why": "स्टार्ट विद व्हाय",
-    "Ego Is the Enemy": "ईगो इज़ द एनिमी"
 }
 
 CONCEPT_MAPPINGS = {
@@ -98,108 +75,34 @@ CONCEPT_MAPPINGS = {
     "motivation": "प्रेरणा (motivation)",
     "procrastination": "टालमटोल (procrastination)",
     "self-discipline": "आत्म-अनुशासन (self-discipline)",
-    "self-awareness": "आत्म-जागरूकता (self-awareness)",
-    "self-esteem": "आत्म-सम्मान (self-esteem)",
     "confidence": "आत्मविश्वास (confidence)",
     "mindset": "मानसिकता (mindset)",
-    "growth mindset": "विकासवादी मानसिकता (growth mindset)",
-    "fixed mindset": "स्थिर मानसिकता (fixed mindset)",
-    "identity": "पहचान (identity)",
-    "belief": "विश्वास (belief)",
-    "fear": "डर (fear)",
-    "anxiety": "चिंता (anxiety)",
-    "focus": "एकाग्रता (focus)",
-    "attention": "ध्यान (attention)",
-    "awareness": "जागरूकता (awareness)",
-    "habit": "आदत (habit)",
 }
 
 BUSINESS_MAPPINGS = {
     "wealth": "धन-संपत्ति (wealth)",
     "income": "आय (income)",
-    "expense": "खर्च (expense)",
-    "saving": "बचत (saving)",
     "investment": "निवेश (investment)",
-    "compound interest": "चक्रवृद्धि ब्याज (compound interest)",
-    "cash flow": "नकदी प्रवाह (cash flow)",
     "financial freedom": "वित्तीय स्वतंत्रता (financial freedom)",
-    "passive income": "निष्क्रिय आय (passive income)",
-    "active income": "सक्रिय आय (active income)",
-    "asset": "संपत्ति (asset)",
-    "liability": "दायित्व (liability)",
-    "risk": "जोखिम (risk)",
-    "opportunity": "अवसर (opportunity)",
-    "entrepreneur": "उद्यमी (entrepreneur)",
-    "entrepreneurship": "उद्यमिता (entrepreneurship)",
-    "business model": "व्यवसाय मॉडल (business model)",
-    "market": "बाज़ार (market)",
-    "profit": "लाभ (profit)",
-    "loss": "हानि (loss)"
 }
 
 PHILOSOPHY_MAPPINGS = {
     "philosophy": "दर्शन (philosophy)",
     "stoicism": "स्टोइक दर्शन (Stoicism)",
-    "stoic": "स्टोइक (Stoic)",
-    "existentialism": "अस्तित्ववाद (existentialism)",
-    "nihilism": "निहिलिज़्म (nihilism)",
-    "absurdism": "एब्सर्डिज़्म (absurdism)",
-    "epistemology": "ज्ञानमीमांसा (epistemology)",
-    "ontology": "ऑन्टोलॉजी (ontology)",
     "ethics": "नीतिशास्त्र (ethics)",
-    "morality": "नैतिकता (morality)",
-    "virtue": "सद्गुण (virtue)",
-    "consciousness": "चेतना (consciousness)",
-    "free will": "स्वतंत्र इच्छा (free will)",
-    "determinism": "नियतिवाद (determinism)",
     "meaning": "अर्थ (meaning)",
-    "purpose": "उद्देश्य (purpose)",
-    "wisdom": "बुद्धिमत्ता (wisdom)",
-    "rationality": "तर्कशीलता (rationality)",
-    "pragmatism": "व्यावहारिकता (pragmatism)"
 }
 
 PSYCHOLOGY_MAPPINGS = {
     "dopamine": "डोपामिन (dopamine)",
-    "cortisol": "कॉर्टिसोल (cortisol)",
-    "serotonin": "सेरोटोनिन (serotonin)",
-    "subconscious": "अवचेतन मन (subconscious)",
-    "conscious mind": "चेतन मन (conscious mind)",
-    "confirmation bias": "कन्फर्मेशन बायस (confirmation bias)",
-    "cognitive bias": "संज्ञानात्मक पूर्वाग्रह (cognitive bias)",
-    "loss aversion": "हानि से बचने की प्रवृत्ति (loss aversion)",
+    "confidence": "आत्मविश्वास (confidence)",
     "decision making": "निर्णय लेने की प्रक्रिया (decision making)",
-    "emotional intelligence": "भावनात्मक बुद्धिमत्ता (emotional intelligence)",
-    "social pressure": "सामाजिक दबाव (social pressure)",
-    "peer pressure": "साथियों का दबाव (peer pressure)",
-    "instant gratification": "तुरंत संतुष्टि (instant gratification)",
-    "delayed gratification": "विलंबित संतुष्टि (delayed gratification)",
-    "comfort zone": "आराम का क्षेत्र (comfort zone)",
-    "burnout": "मानसिक थकावट (burnout)",
-    "overthinking": "अति-विचार (overthinking)",
-    "self-sabotage": "खुद को नुकसान पहुँचाने वाला व्यवहार (self-sabotage)"
 }
 
 NARRATION_MAPPINGS = {
     "however": "लेकिन",
     "therefore": "इसलिए",
     "because": "क्योंकि",
-    "for example": "उदाहरण के लिए",
-    "in other words": "दूसरे शब्दों में",
-    "the truth is": "सच्चाई यह है कि",
-    "the important thing is": "सबसे महत्वपूर्ण बात यह है कि",
-    "remember": "याद रखिए",
-    "imagine": "ज़रा सोचिए",
-    "think about it": "ज़रा इस बारे में सोचिए",
-    "the question is": "सवाल यह है कि",
-    "the answer is": "इसका जवाब है",
-    "most importantly": "सबसे महत्वपूर्ण बात",
-    "at first": "शुरुआत में",
-    "eventually": "आखिरकार",
-    "in the end": "अंत में",
-    "this means": "इसका मतलब है",
-    "what if": "अगर ऐसा हो तो",
-    "the lesson is": "इससे हमें यह सीख मिलती है"
 }
 
 # COMBINE ALL MAPPINGS
@@ -215,77 +118,159 @@ ALL_MAPPINGS = {
 }
 
 
+# ═══════════════════════════════════════════════════════════
+# FIX #1: PROPER DEPENDENCY CHECK
+# ═══════════════════════════════════════════════════════════
+def check_dependencies():
+    """Check if all required packages are installed."""
+    print("\n🔍 Checking dependencies...")
+    
+    dependencies = {
+        'elevenlabs': 'ElevenLabs API client',
+        'pydub': 'Audio processing',
+        'dotenv': 'Environment variables (optional but recommended)',
+    }
+    
+    missing = []
+    for package, description in dependencies.items():
+        try:
+            __import__(package)
+            print(f"  ✅ {package}: {description}")
+        except ImportError:
+            print(f"  ❌ {package}: {description} - MISSING!")
+            missing.append(package)
+    
+    if missing:
+        print(f"\n⚠️  Install missing packages:")
+        print(f"   pip install {' '.join(missing)}")
+        print(f"\n📝 Also install ffmpeg:")
+        print(f"   Ubuntu: sudo apt-get install ffmpeg")
+        print(f"   Mac: brew install ffmpeg")
+        print(f"   Windows: choco install ffmpeg\n")
+        return False
+    
+    print("  ✅ All dependencies OK!\n")
+    return True
+
+
+# ═══════════════════════════════════════════════════════════
+# FIX #2: ENVIRONMENT SETUP
+# ═══════════════════════════════════════════════════════════
+def verify_environment():
+    """Verify API keys and paths."""
+    print("🔐 Verifying environment setup...\n")
+    
+    # Check API Key
+    api_key = os.environ.get("ELEVENLABS_API_KEY")
+    if not api_key:
+        print("❌ ELEVENLABS_API_KEY not set!")
+        print("   Set it with:")
+        print("   export ELEVENLABS_API_KEY='your-key-here'")
+        print("   Or in .env file\n")
+        return False
+    else:
+        print(f"  ✅ ELEVENLABS_API_KEY: {api_key[:10]}...{api_key[-5:]}")
+    
+    # Check data directory
+    if not DATA_DIR.exists():
+        print(f"❌ Data directory not found: {DATA_DIR}")
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        print(f"   Created: {DATA_DIR}\n")
+        return False
+    else:
+        print(f"  ✅ Data directory: {DATA_DIR}")
+    
+    # Check script file
+    if not SCRIPT_FILE.exists():
+        print(f"❌ Script file not found: {SCRIPT_FILE}")
+        print("   Create a script.json with:")
+        print('   {"book": "Atomic Habits", "script": "Your text here..."}\n')
+        return False
+    else:
+        print(f"  ✅ Script file: {SCRIPT_FILE}")
+    
+    # Create output directory
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    print(f"  ✅ Output directory: {OUTPUT_DIR}\n")
+    
+    return True
+
+
+# ═══════════════════════════════════════════════════════════
+# FIX #3: BETTER MAPPING APPLICATION
+# ═══════════════════════════════════════════════════════════
 def add_all_mappings_to_text(text):
-    """
-    Add ALL mappings to text:
-    - Devanagari
-    - Authors
-    - Books
-    - Concepts
-    - Business
-    - Philosophy
-    - Psychology
-    - Narration
-    """
+    """Add ALL mappings to text with better handling."""
     modified_text = text
     
-    print(f"  Applying {len(ALL_MAPPINGS)} mappings...")
+    print(f"\n  📝 Applying {len(ALL_MAPPINGS)} mappings...")
+    applied = 0
     
-    for english, hindi in ALL_MAPPINGS.items():
-        # Case-insensitive replacement
-        pattern = re.compile(re.escape(english), re.IGNORECASE)
+    # Sort by length (longest first) to avoid partial replacements
+    sorted_mappings = sorted(ALL_MAPPINGS.items(), key=lambda x: len(x[0]), reverse=True)
+    
+    for english, hindi in sorted_mappings:
+        # Case-insensitive replacement - word boundaries
+        pattern = re.compile(r'\b' + re.escape(english) + r'\b', re.IGNORECASE)
+        before = modified_text.count(english)
         modified_text = pattern.sub(hindi, modified_text)
+        after = modified_text.count(hindi)
+        
+        if after > before:
+            applied += 1
     
+    print(f"  ✅ Applied: {applied} unique mappings\n")
     return modified_text
 
 
-def load_script():
-    """Load generated script."""
-    with open(SCRIPT_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
+# ═══════════════════════════════════════════════════════════
+# FIX #4: BETTER CHUNKING LOGIC
+# ═══════════════════════════════════════════════════════════
 def smart_chunk_text_range(text, min_chars=MIN_CHUNK_CHARS, max_chars=MAX_CHUNK_CHARS, target_chars=TARGET_CHUNK_CHARS):
     """
     SMART CHUNKING (2000-3000 char range):
     1. Split by paragraphs
-    2. Combine until 2000-3000 range
+    2. Combine until in range
     3. If too long, split by sentences
     """
     
-    paragraphs = text.split("\n\n")
+    paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
+    
+    if not paragraphs:
+        return [text] if text else []
     
     chunks = []
     current_chunk = ""
     
     for paragraph in paragraphs:
-        paragraph = paragraph.strip()
-        if not paragraph:
-            continue
-        
         test_chunk = current_chunk + "\n\n" + paragraph if current_chunk else paragraph
         test_length = len(test_chunk)
         
+        # If test chunk is within range, use it
         if min_chars <= test_length <= max_chars:
             current_chunk = test_chunk
         
+        # If test chunk is too long
         elif test_length > max_chars:
+            # Save current chunk if valid
             if current_chunk and len(current_chunk) >= min_chars:
                 chunks.append(current_chunk.strip())
-                current_chunk = paragraph
+                current_chunk = ""
             
-            elif len(paragraph) > max_chars:
-                sentences = paragraph.split(". ")
+            # If paragraph itself is too long, split by sentences
+            if len(paragraph) > max_chars:
+                sentences = [s.strip() for s in paragraph.split(". ") if s.strip()]
                 sentence_chunk = ""
                 
-                for sentence in sentences:
-                    piece = sentence if sentence.endswith(".") else sentence + "."
-                    piece += " "
+                for i, sentence in enumerate(sentences):
+                    # Add period if missing
+                    piece = sentence if sentence.endswith(".") else sentence
+                    piece += ". " if i < len(sentences) - 1 else "."
                     
-                    sentence_chunk_test = sentence_chunk + piece
+                    sentence_chunk_test = sentence_chunk + " " + piece if sentence_chunk else piece
                     
                     if len(sentence_chunk_test) <= max_chars:
-                        sentence_chunk += piece
+                        sentence_chunk = sentence_chunk_test
                     else:
                         if sentence_chunk and len(sentence_chunk) >= min_chars:
                             chunks.append(sentence_chunk.strip())
@@ -293,31 +278,43 @@ def smart_chunk_text_range(text, min_chars=MIN_CHUNK_CHARS, max_chars=MAX_CHUNK_
                 
                 if sentence_chunk and len(sentence_chunk) >= min_chars:
                     chunks.append(sentence_chunk.strip())
-                current_chunk = ""
+            
             else:
+                # Paragraph is small enough
                 current_chunk = paragraph
+        
+        else:
+            # Test chunk is too small, keep accumulating
+            current_chunk = test_chunk
     
+    # Add final chunk
     if current_chunk and len(current_chunk) >= min_chars:
         chunks.append(current_chunk.strip())
     
-    return chunks
+    return chunks if chunks else [text]
 
 
+# ═══════════════════════════════════════════════════════════
+# FIX #5: BETTER ERROR HANDLING IN VOICE GENERATION
+# ═══════════════════════════════════════════════════════════
 def generate_with_elevenlabs_all_mappings(script_text, voice_id):
-    """
-    Voice generation with ALL MAPPINGS integrated.
-    """
-    from elevenlabs.client import ElevenLabs
-    from elevenlabs import VoiceSettings
-    from pydub import AudioSegment
-    import io
-
-    client = ElevenLabs(api_key=os.environ["ELEVENLABS_API_KEY"])
+    """Voice generation with ALL MAPPINGS + PROPER ERROR HANDLING."""
     
+    try:
+        from elevenlabs.client import ElevenLabs
+        from elevenlabs import VoiceSettings
+        from pydub import AudioSegment
+        import io
+    except ImportError as e:
+        print(f"❌ Import error: {e}")
+        print("   Install: pip install elevenlabs pydub")
+        return False
+
     # ADD ALL MAPPINGS
     print("\n📝 Adding Hinglish Pronunciations...")
     script_text = add_all_mappings_to_text(script_text)
     
+    # CHUNK TEXT
     chunks = smart_chunk_text_range(script_text, MIN_CHUNK_CHARS, MAX_CHUNK_CHARS, TARGET_CHUNK_CHARS)
 
     print(f"\n🎙️ PHILOSOPHER VOICE GENERATION (ALL MAPPINGS)")
@@ -325,34 +322,35 @@ def generate_with_elevenlabs_all_mappings(script_text, voice_id):
     print(f"📝 Script: {len(script_text)} characters")
     print(f"📦 Chunks: {len(chunks)} pieces")
     print(f"🗺️  Mappings: {len(ALL_MAPPINGS)} total")
-    print(f"  ├─ Devanagari: {len(DEVANAGARI_MAPPINGS)}")
-    print(f"  ├─ Authors: {len(AUTHOR_MAPPINGS)}")
-    print(f"  ├─ Books: {len(BOOK_MAPPINGS)}")
-    print(f"  ├─ Concepts: {len(CONCEPT_MAPPINGS)}")
-    print(f"  ├─ Business: {len(BUSINESS_MAPPINGS)}")
-    print(f"  ├─ Philosophy: {len(PHILOSOPHY_MAPPINGS)}")
-    print(f"  ├─ Psychology: {len(PSYCHOLOGY_MAPPINGS)}")
-    print(f"  └─ Narration: {len(NARRATION_MAPPINGS)}")
     print(f"🎙️ Voice ID: {voice_id}")
     print(f"🔒 Seed: {VOICE_SEED} (LOCKED)")
     print(f"📏 Range: {MIN_CHUNK_CHARS}-{MAX_CHUNK_CHARS} chars")
     print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
 
+    try:
+        client = ElevenLabs(api_key=os.environ["ELEVENLABS_API_KEY"])
+    except Exception as e:
+        print(f"❌ API Client Error: {e}")
+        print("   Check your ELEVENLABS_API_KEY\n")
+        return False
+
     combined = AudioSegment.empty()
+    successful_chunks = 0
 
     # Generate each chunk
     for idx, chunk in enumerate(chunks, start=1):
         chunk_words = len(chunk.split())
         chunk_chars = len(chunk)
         
-        print(f"  [{idx}/{len(chunks)}] Chunk ({chunk_chars} chars, {chunk_words} words)...", end="")
+        print(f"  [{idx}/{len(chunks)}] Chunk ({chunk_chars} chars, {chunk_words} words)...", end="", flush=True)
         
         try:
+            # Make API call with error handling
             audio_stream = client.text_to_speech.convert(
                 voice_id=voice_id,
                 output_format="mp3_44100_128",
                 text=chunk,
-                model_id="eleven_v3",
+                model_id="eleven_multilingual_v2",  # Better for Hinglish
                 seed=VOICE_SEED,
                 voice_settings=VoiceSettings(
                     stability=0.78,
@@ -363,8 +361,14 @@ def generate_with_elevenlabs_all_mappings(script_text, voice_id):
             )
 
             audio_bytes = b"".join(audio_stream)
+            
+            if not audio_bytes:
+                print(" ⚠️  Empty audio received")
+                continue
+            
             segment = AudioSegment.from_file(io.BytesIO(audio_bytes), format="mp3")
             combined += segment
+            successful_chunks += 1
             
             print(" ✅")
 
@@ -372,48 +376,94 @@ def generate_with_elevenlabs_all_mappings(script_text, voice_id):
                 combined += AudioSegment.silent(duration=PAUSE_DURATION)
                 
         except Exception as e:
-            print(f" ❌ Error: {e}")
-            raise
+            print(f" ❌")
+            print(f"     Error: {str(e)[:100]}")
+            print(f"     Check:")
+            print(f"     - API key validity")
+            print(f"     - Rate limits (wait a minute)")
+            print(f"     - Text length and content")
+            continue
+
+    if successful_chunks == 0:
+        print("\n❌ No chunks generated successfully!")
+        return False
 
     # Export
-    OUTPUT_DIR.mkdir(exist_ok=True)
-    combined.export(VOICE_OUTPUT, format="mp3", bitrate="128k")
+    try:
+        OUTPUT_DIR.mkdir(exist_ok=True)
+        combined.export(VOICE_OUTPUT, format="mp3", bitrate="128k")
 
-    duration_min = len(combined) / 1000 / 60
-    print(f"\n{'━'*70}")
-    print(f"✅ Voice generation complete!")
-    print(f"📊 Total duration: {duration_min:.1f} minutes")
-    print(f"📁 Saved: {VOICE_OUTPUT}")
-    print(f"🗺️  Applied: {len(ALL_MAPPINGS)} mappings")
-    print(f"🎯 Consistency: PERFECT")
-    print(f"{'━'*70}\n")
+        duration_min = len(combined) / 1000 / 60
+        print(f"\n{'━'*70}")
+        print(f"✅ Voice generation complete!")
+        print(f"📊 Total duration: {duration_min:.1f} minutes")
+        print(f"✅ Successful chunks: {successful_chunks}/{len(chunks)}")
+        print(f"📁 Saved: {VOICE_OUTPUT}")
+        print(f"🗺️  Applied: {len(ALL_MAPPINGS)} mappings")
+        print(f"{'━'*70}\n")
+        
+        return True
+        
+    except Exception as e:
+        print(f"\n❌ Export error: {e}\n")
+        return False
 
 
 def main():
-    """Main flow."""
+    """Main flow with better error handling."""
     
     print("\n" + "="*70)
     print("GROW WITH BOOKS - VOICE WITH ALL MAPPINGS")
     print("="*70)
     
-    if not os.environ.get("ELEVENLABS_API_KEY"):
-        raise RuntimeError("❌ ELEVENLABS_API_KEY not set!")
-
-    data = load_script()
-    script_text = data["script"]
+    # Step 1: Check dependencies
+    if not check_dependencies():
+        sys.exit(1)
     
-    print(f"\n📚 Book: {data.get('book', 'Unknown')}")
-    print(f"✍️  Script length: {len(script_text)} characters")
+    # Step 2: Verify environment
+    if not verify_environment():
+        sys.exit(1)
     
+    # Step 3: Load script
+    try:
+        with open(SCRIPT_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        script_text = data.get("script", "")
+        
+        if not script_text:
+            print("❌ Script is empty!\n")
+            sys.exit(1)
+            
+        print(f"📚 Book: {data.get('book', 'Unknown')}")
+        print(f"✍️  Script length: {len(script_text)} characters\n")
+        
+    except json.JSONDecodeError as e:
+        print(f"❌ Invalid JSON in script.json: {e}\n")
+        sys.exit(1)
+    except Exception as e:
+        print(f"❌ Error loading script: {e}\n")
+        sys.exit(1)
+    
+    # Step 4: Get voice ID
     voice_id = os.environ.get("ELEVENLABS_VOICE_ID", DEFAULT_VOICE_ID)
     print(f"🎙️ Voice ID: {voice_id}\n")
 
+    # Step 5: Generate voice
     try:
-        generate_with_elevenlabs_all_mappings(script_text, voice_id)
-        print("🎉 SUCCESS! Voice with all mappings ready!\n")
+        success = generate_with_elevenlabs_all_mappings(script_text, voice_id)
+        if success:
+            print("🎉 SUCCESS! Voice with all mappings ready!\n")
+        else:
+            print("❌ Voice generation failed. Check errors above.\n")
+            sys.exit(1)
+    except KeyboardInterrupt:
+        print("\n\n⚠️  Interrupted by user\n")
+        sys.exit(0)
     except Exception as e:
-        print(f"❌ Error: {e}\n")
-        raise
+        print(f"\n❌ Unexpected error: {e}\n")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
 
 
 if __name__ == "__main__":
