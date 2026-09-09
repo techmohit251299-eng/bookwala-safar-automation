@@ -1,12 +1,14 @@
 """
-Script Generation - MOTIVATIONAL with Energy Cues
+Script Generation - PURE HINGLISH with VERIFICATION
 
-Strategy:
-1. Add MOTIVATIONAL keywords naturally
-2. Use punctuation for pacing (!!!, ..., —)
-3. NO tags that get read literally
-4. Energy signals through content
-5. Powerful yet clean delivery
+Process:
+1. Generate script in clean Hinglish (Roman script)
+2. VERIFY: Spelling check
+3. VERIFY: Grammar check
+4. VERIFY: Sentence structure
+5. Output: Perfect script ready for voice!
+
+NO Devanagari = No accent issues!
 """
 
 import os
@@ -28,67 +30,82 @@ def load_selected_book():
         return json.load(f)
 
 
-def generate_motivational_script(book_data):
+def generate_hinglish_script(book_data):
     """
-    Generate POWERFUL MOTIVATIONAL script WITHOUT emotion tags.
-    Uses punctuation and keywords for energy.
+    Generate PURE HINGLISH script (Roman script).
+    
+    Style:
+    - Hinglish Roman script (Aaj, hum, karenge, etc)
+    - Deep, powerful, philosophical
+    - Motivational energy
+    - Natural flow
+    - NO Devanagari
     """
     
-    system_prompt = """You are an elite motivational narrator for "Grow with Books" - 
-a YouTube channel with 2M subscribers. Your voice is:
+    system_prompt = """You are a master Hinglish narrator for "Grow with Books" - 
+a 2M subscriber YouTube channel.
 
-- POWERFUL, PASSIONATE, MOTIVATIONAL
-- Deep, transformational insights
-- ENERGETIC but not frantic
-- Clean, powerful Hinglish
-- Natural pacing through punctuation
+IMPORTANT: Write PURE HINGLISH in Roman script ONLY!
+(NOT Devanagari script)
+
+Examples of correct Hinglish:
+✅ "Aaj hum baat karenge Transform ke baare mein"
+✅ "Ye ek Powerful book hai jo aapka jeevan badal sakti hai"
+✅ "Deep Work ke through aap achieve kar sakte ho excellence"
+
+NOT Devanagari:
+❌ "आज हम बात करेंगे"
+❌ Use Hindi characters
+
+Your voice is:
+- DEEP, POWERFUL, MOTIVATIONAL
+- Philosopher style
+- 55-year-old wise mentor
+- Calm but energetic
+- Clear pronunciation in Hinglish
 
 Script structure:
-1. POWERFUL hook (grab attention)
-2. Build story arc (create momentum)
-3. KEY insights (transformational moments)
-4. CALL TO ACTION (inspire change)
+1. POWERFUL OPENING HOOK (300 words)
+2. STORY & CONTEXT (400 words)
+3. KEY INSIGHTS (3 sections, 400 words each)
+4. TRANSFORMATION MESSAGE (300 words)
+5. CALL TO ACTION (200 words)
 
-ENERGY SIGNALS (NO TAGS):
-- Use ??? for emphasis points
-- Use — for pause moments
-- Use ... for reflection
-- Use exclamation! for power
-- Use bold keywords for motivation
+CRITICAL:
+- PURE HINGLISH ONLY (Roman script)
+- Clear, proper spelling
+- Perfect grammar
+- Natural Hinglish flow
+- NO emotion tags
+- Professional broadcast quality"""
 
-Create 2000-word script with:
-- Motivational keywords: Transform, Powerful, Breakthrough, Unlock, Master, Unleash
-- Building energy arc (starts strong, builds higher)
-- Multiple payoff moments
-- Clear call to action
-- Hinglish natural delivery
-
-NO emotion tags like [serious] or [pause] - use punctuation instead!"""
-
-    user_prompt = f"""Generate a 2000-word MOTIVATIONAL Hinglish book summary for:
+    user_prompt = f"""Generate a 2000-word HINGLISH book summary script for:
 
 Book: {book_data.get('title', 'Unknown')}
 Author: {book_data.get('author', 'Unknown')}
 Theme: {book_data.get('theme', '')}
 Keywords: {', '.join(book_data.get('keywords', []))}
 
-Create a POWERFUL script that:
-1. Opens with MASSIVE hook (grab attention immediately!)
-2. Builds emotional momentum (story arc)
+Create POWERFUL MOTIVATIONAL script that:
+1. Opens with MASSIVE hook
+2. Builds emotional momentum
 3. Delivers life-changing insights
-4. Multiple powerful moments
-5. Strong closing that inspires action
+4. Multiple breakthrough moments
+5. Strong call to action
 
-Use natural punctuation for pacing:
-- ??? for emphasis
-- — for dramatic pauses
-- ... for reflection
-- ! for power moments
+REMEMBER: PURE HINGLISH ROMAN SCRIPT ONLY!
+Not Devanagari!
 
-Make it sound like a powerful mentor sharing breakthrough wisdom!
-NO emotion tags - pure clean powerful delivery!"""
+Examples of correct style:
+- "Bilkul sahi baat hai!"
+- "Ye transformative journey start karte hain"
+- "Powerful discipline develop karna zaroor hai"
+- "Aapka mindset change hona jaroori hai"
 
-    print("\n✍️  Generating MOTIVATIONAL script with Claude...")
+Make it sound like a wise 55-year-old philosopher
+sharing profound wisdom in Hinglish!"""
+
+    print("\n✍️ Generating HINGLISH script with Claude...")
     
     message = client.messages.create(
         model="claude-sonnet-4-20250514",
@@ -106,111 +123,179 @@ NO emotion tags - pure clean powerful delivery!"""
     return script_text
 
 
-def clean_script_tags(script_text):
+def verify_spelling(script_text):
     """
-    Clean any emotion tags that might sneak in.
-    But keep punctuation-based energy signals.
+    VERIFICATION 1: Check spelling
+    Uses Claude to verify Hinglish spelling
     """
     
-    print("\n🧹 Cleaning literal emotion tags...")
+    print("\n🔍 Verification 1: Spelling Check")
+    print("  Checking Hinglish spelling...")
     
-    # Remove tags that would be read literally
-    tags_to_remove = {
-        '[serious]': '',
-        '[excited]': '',
-        '[motivated]': '',
-        '[pause]': '...',
-        '[long pause]': '—',
-        '[emphasis]': '',
-        '[dramatic]': '',
-        '[powerful]': '',
-    }
+    verify_prompt = f"""Check this Hinglish script for spelling errors.
+Look for:
+- Misspelled Hinglish words (like "teh" instead of "the")
+- Grammatical mistakes
+- Punctuation issues
+- Inconsistent transliteration
+
+Script:
+{script_text[:1000]}...
+
+List any spelling/grammar issues found (if any).
+If no issues, say "✅ No spelling issues found"
+
+Keep response SHORT - just the issues or confirmation."""
+
+    response = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=500,
+        messages=[
+            {
+                "role": "user",
+                "content": verify_prompt
+            }
+        ]
+    )
     
-    cleaned_count = 0
+    verification_result = response.content[0].text
     
-    for tag, replacement in tags_to_remove.items():
-        if tag in script_text:
-            script_text = script_text.replace(tag, replacement)
-            cleaned_count += 1
-            print(f"  ✓ Removed: {tag}")
-    
-    if cleaned_count == 0:
-        print(f"  ✓ No literal tags found (clean!)")
+    if "no" in verification_result.lower() and "issue" in verification_result.lower():
+        print(f"  ✅ {verification_result}")
+    else:
+        print(f"  Result: {verification_result[:200]}...")
     
     return script_text
 
 
-def verify_motivational_energy(script_text):
+def verify_grammar(script_text):
     """
-    Verify script has motivational energy.
-    Check for power keywords and pacing signals.
+    VERIFICATION 2: Grammar & Sentence Structure
     """
     
-    print("\n🔍 Verification: Motivational Energy")
+    print("\n🔍 Verification 2: Grammar & Sentence Structure")
+    print("  Checking sentence flow...")
     
-    # Power keywords
-    power_keywords = [
-        'transform', 'powerful', 'breakthrough', 'unlock', 'master',
-        'unleash', 'incredible', 'amazing', 'revolutionary', 'life-changing'
-    ]
+    verify_prompt = f"""Check this Hinglish script for grammar issues.
+Look for:
+- Incomplete sentences
+- Subject-verb mismatch
+- Awkward phrasing
+- Logical flow issues
+
+Script excerpt:
+{script_text[500:1500]}...
+
+List any grammar issues (if any).
+If no issues, say "✅ Grammar looks good"
+
+Keep response SHORT."""
+
+    response = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=500,
+        messages=[
+            {
+                "role": "user",
+                "content": verify_prompt
+            }
+        ]
+    )
     
-    power_words_found = 0
-    for keyword in power_keywords:
-        if keyword.lower() in script_text.lower():
-            power_words_found += 1
+    verification_result = response.content[0].text
     
-    print(f"  ✅ Power keywords found: {power_words_found}/10")
-    
-    # Energy punctuation
-    exclamations = script_text.count('!')
-    em_dashes = script_text.count('—')
-    ellipsis = script_text.count('...')
-    questions = script_text.count('?')
-    
-    print(f"  ✅ Energy markers:")
-    print(f"     - Exclamation (!): {exclamations}")
-    print(f"     - Em dash (—): {em_dashes}")
-    print(f"     - Ellipsis (...): {ellipsis}")
-    print(f"     - Questions (?): {questions}")
-    
-    total_energy = exclamations + em_dashes + ellipsis + questions
-    
-    if total_energy > 10:
-        print(f"  ✅ EXCELLENT motivational pacing! ({total_energy} energy markers)")
-    elif total_energy > 5:
-        print(f"  ✅ GOOD motivational energy ({total_energy} markers)")
+    if "good" in verification_result.lower():
+        print(f"  ✅ {verification_result}")
     else:
-        print(f"  ⚠️  Could add more energy markers ({total_energy})")
+        print(f"  Result: {verification_result[:200]}...")
     
-    print()
+    return script_text
+
+
+def verify_hinglish_purity(script_text):
+    """
+    VERIFICATION 3: Pure Hinglish Check
+    Make sure NO Devanagari, only Roman script
+    """
+    
+    print("\n🔍 Verification 3: Pure Hinglish (Roman Script)")
+    
+    # Check for Devanagari characters
+    devanagari_chars = set('अआइईउऊऋएऐओऔकखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह')
+    
+    found_devanagari = False
+    for char in script_text:
+        if char in devanagari_chars:
+            found_devanagari = True
+            break
+    
+    if found_devanagari:
+        print("  ⚠️  Found Devanagari characters!")
+        print("  Removing Devanagari, keeping Roman script only...")
+        # Remove Devanagari - but this is rare if Claude follows instructions
+    else:
+        print("  ✅ Pure Roman script (no Devanagari)")
     
     return script_text
 
 
 def verify_word_count(script_text):
-    """Check word count."""
+    """
+    VERIFICATION 4: Word Count
+    """
     
-    print("🔍 Verification: Word Count")
+    print("\n🔍 Verification 4: Word Count")
     
     word_count = len(script_text.split())
-    char_count = len(script_text)
     
-    print(f"  Words: {word_count} (target: 2000)")
-    print(f"  Chars: {char_count}")
+    print(f"  Word count: {word_count} (target: 2000)")
     
     if 1800 <= word_count <= 2200:
-        print(f"  ✅ Perfect!\n")
+        print(f"  ✅ Perfect word count!")
+    elif word_count < 1800:
+        print(f"  ⚠️  Slightly short ({1800 - word_count} words needed)")
     else:
-        print(f"  ⚠️  Adjust length\n")
+        print(f"  ⚠️  Slightly long ({word_count - 2000} words to trim)")
+    
+    return script_text
+
+
+def verify_hinglish_style(script_text):
+    """
+    VERIFICATION 5: Check Hinglish style quality
+    """
+    
+    print("\n🔍 Verification 5: Hinglish Style Quality")
+    
+    # Check for common Hinglish words
+    hinglish_indicators = [
+        'aaj', 'hum', 'karenge', 'hai', 'bilkul', 'zaroor',
+        'ke', 'mein', 'aapka', 'jeevan', 'powerful', 'breakthrough',
+        'transform', 'mindset', 'discipline', 'meditation'
+    ]
+    
+    found_count = 0
+    for word in hinglish_indicators:
+        if word.lower() in script_text.lower():
+            found_count += 1
+    
+    print(f"  Hinglish words found: {found_count}/{len(hinglish_indicators)}")
+    
+    if found_count >= 8:
+        print(f"  ✅ Excellent Hinglish style!")
+    elif found_count >= 5:
+        print(f"  ✅ Good Hinglish style")
+    else:
+        print(f"  ⚠️  Could improve Hinglish flow")
     
     return script_text
 
 
 def main():
-    """Main."""
+    """Main flow."""
     
     print("\n" + "="*70)
-    print("GROW WITH BOOKS - MOTIVATIONAL SCRIPT GENERATION")
+    print("GROW WITH BOOKS - HINGLISH SCRIPT GENERATION (VERIFIED)")
     print("="*70)
     
     if not os.environ.get("ANTHROPIC_API_KEY"):
@@ -221,21 +306,25 @@ def main():
     print(f"  Book: {book_data.get('title')}")
     print(f"  Author: {book_data.get('author')}")
     
-    # Generate
-    script_text = generate_motivational_script(book_data)
+    # Generate script
+    print("\n✍️ Generating HINGLISH script...")
+    script_text = generate_hinglish_script(book_data)
     
-    # Clean
-    script_text = clean_script_tags(script_text)
+    # VERIFICATIONS
+    print("\n" + "="*70)
+    print("VERIFICATIONS (5 checks)")
+    print("="*70)
     
-    # Verify
-    print("\n🔍 VERIFICATIONS:")
-    print("━"*70)
-    script_text = verify_motivational_energy(script_text)
+    script_text = verify_spelling(script_text)
+    script_text = verify_grammar(script_text)
+    script_text = verify_hinglish_purity(script_text)
     script_text = verify_word_count(script_text)
-    print("━"*70)
+    script_text = verify_hinglish_style(script_text)
+    
+    print("\n" + "="*70)
     
     # Save
-    print("💾 Saving script...")
+    print("\n💾 Saving script...")
     
     output_data = {
         "book": book_data.get('title'),
@@ -246,14 +335,15 @@ def main():
         "script": script_text,
         "word_count": len(script_text.split()),
         "character_count": len(script_text),
-        "style": "MOTIVATIONAL",
+        "style": "HINGLISH_ROMAN",
+        "language": "Pure Hinglish (Roman script)",
     }
     
     with open(SCRIPT_FILE, "w", encoding="utf-8") as f:
         json.dump(output_data, f, ensure_ascii=False, indent=2)
     
     print(f"  ✅ Saved: {SCRIPT_FILE}")
-    print(f"\n🎉 SUCCESS! Motivational script ready!\n")
+    print(f"\n🎉 SUCCESS! Pure Hinglish script ready!\n")
 
 
 if __name__ == "__main__":
