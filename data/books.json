@@ -29,7 +29,7 @@
     ],
     "hashtags": "#deepwork #focus #productivity #concentration #mindfulness",
     "description": "In age of constant distraction, deep focused work is rare skill. Trending heavily among students and professionals.",
-    "used": true
+    "used": false
   },
   {
     "title": "The Subtle Art of Not Giving a F*ck",
@@ -45,7 +45,7 @@
     ],
     "hashtags": "#subtleart #priorities #mentalhealthmatters #realtalk #lifeadvice",
     "description": "Viral for refreshingly honest take on life. Cuts through toxic motivation culture. Gen Z loves counter-narrative approach.",
-    "used": true
+    "used": false
   },
   {
     "title": "Man's Search for Meaning",
@@ -62,7 +62,7 @@
     ],
     "hashtags": "#meaningoflife #purpose #resilience #philosophy #stoicism",
     "description": "Holocaust survivor's philosophy. Deep, emotional content. Perfect for late-night motivational videos. High watch time.",
-    "used": true
+    "used": false
   },
   {
     "title": "Mindset",
@@ -79,7 +79,7 @@
     ],
     "hashtags": "#growthmindset #mindset #learning #potential #psychology",
     "description": "Psychological research backing personal growth. Teachers and students love this. Educational + motivational combo = viral.",
-    "used": true
+    "used": false
   },
   {
     "title": "The 48 Laws of Power",
@@ -96,7 +96,7 @@
     ],
     "hashtags": "#powerofinfluence #psychology #humanbehavior #strategy #socialdynamics",
     "description": "Controversial but addictive. Each law makes people think differently. TikTok and YouTube explosion. Dark but engaging.",
-    "used": true
+    "used": false
   },
   {
     "title": "Can't Hurt Me",
@@ -113,7 +113,7 @@
     ],
     "hashtags": "#mentaltoughness #discipline #motivation #canthurtme #extremetraining",
     "description": "Navy SEAL's raw story. Workout videos + motivation trending massively. Gym bros and motivation seekers flood comments.",
-    "used": true
+    "used": false
   },
   {
     "title": "Thinking, Fast and Slow",
@@ -130,7 +130,7 @@
     ],
     "hashtags": "#psychology #cognitivebias #decisionmaking #thinking #neuroscience",
     "description": "Deep psychological insights. Trending among intellectuals. Requires patient viewers but very high engagement quality.",
-    "used": true
+    "used": false
   },
   {
     "title": "The Power of Now",
@@ -147,7 +147,7 @@
     ],
     "hashtags": "#thepowerofnow #mindfulness #spirituality #innerpeace #meditation",
     "description": "Meditation community loves this. Trending for anxiety relief. Aesthetic visuals + calm narration = algorithm gold.",
-    "used": true
+    "used": false
   },
   {
     "title": "7 Habits of Highly Effective People",
@@ -164,6 +164,6 @@
     ],
     "hashtags": "#7habits #productivity #success #personaldevelopment #effectiveness",
     "description": "Timeless classic. Used in corporate training. Trending for career + personal growth. Professionals keep rewatching.",
-    "used": true
+    "used": false
   }
 ]
