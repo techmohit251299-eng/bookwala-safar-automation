@@ -1,12 +1,12 @@
 """
-Script Generation - With Verification & Calm Delivery
+Script Generation - MOTIVATIONAL with Energy Cues
 
-Features:
-1. Generate 2000-word Hinglish script
-2. NO emotion tags (clean text)
-3. Verify: Calm delivery tone
-4. Verify: Hindi pronunciation
-5. Devanagari support
+Strategy:
+1. Add MOTIVATIONAL keywords naturally
+2. Use punctuation for pacing (!!!, ..., —)
+3. NO tags that get read literally
+4. Energy signals through content
+5. Powerful yet clean delivery
 """
 
 import os
@@ -28,50 +28,67 @@ def load_selected_book():
         return json.load(f)
 
 
-def generate_script_with_claude(book_data):
+def generate_motivational_script(book_data):
     """
-    Generate script WITHOUT emotion tags.
-    Focus on CALM, MEASURED delivery.
+    Generate POWERFUL MOTIVATIONAL script WITHOUT emotion tags.
+    Uses punctuation and keywords for energy.
     """
     
-    system_prompt = """You are a professional Hindi/Hinglish narrator for "Grow with Books" - 
-a YouTube channel with 2M subscribers. Your style is:
+    system_prompt = """You are an elite motivational narrator for "Grow with Books" - 
+a YouTube channel with 2M subscribers. Your voice is:
 
-- CALM, MEASURED, PHILOSOPHICAL delivery
-- Deep, thoughtful insights
-- NO emotional tags like [serious], [pause], [excited]
-- Clean, readable Hinglish text
-- Natural pronunciation
+- POWERFUL, PASSIONATE, MOTIVATIONAL
+- Deep, transformational insights
+- ENERGETIC but not frantic
+- Clean, powerful Hinglish
+- Natural pacing through punctuation
 
-Generate a 2000-word book summary script in Hinglish that:
-1. Opens with compelling hook (300 words)
-2. Main insights (3-4 sections, 400 words each)
-3. Closes with transformational message (300 words)
+Script structure:
+1. POWERFUL hook (grab attention)
+2. Build story arc (create momentum)
+3. KEY insights (transformational moments)
+4. CALL TO ACTION (inspire change)
 
-IMPORTANT:
-- NO emotion tags anywhere
-- NO brackets for actions
-- Write for CALM, wise 55-year-old philosopher
-- Use proper punctuation for pacing (... for pauses)
-- Include author names naturally
-- Keep tone consistent throughout
+ENERGY SIGNALS (NO TAGS):
+- Use ??? for emphasis points
+- Use — for pause moments
+- Use ... for reflection
+- Use exclamation! for power
+- Use bold keywords for motivation
 
-The script should feel like a wise mentor sharing timeless wisdom."""
+Create 2000-word script with:
+- Motivational keywords: Transform, Powerful, Breakthrough, Unlock, Master, Unleash
+- Building energy arc (starts strong, builds higher)
+- Multiple payoff moments
+- Clear call to action
+- Hinglish natural delivery
 
-    user_prompt = f"""Generate a 2000-word Hinglish book summary script for:
+NO emotion tags like [serious] or [pause] - use punctuation instead!"""
+
+    user_prompt = f"""Generate a 2000-word MOTIVATIONAL Hinglish book summary for:
 
 Book: {book_data.get('title', 'Unknown')}
 Author: {book_data.get('author', 'Unknown')}
 Theme: {book_data.get('theme', '')}
-Description: {book_data.get('description', '')}
 Keywords: {', '.join(book_data.get('keywords', []))}
-Hashtags: {book_data.get('hashtags', '')}
 
-Create a calm, philosophical script with NO emotion tags.
-Use proper Hindi transliteration (Hinglish).
-Make it suitable for professional YouTube narration."""
+Create a POWERFUL script that:
+1. Opens with MASSIVE hook (grab attention immediately!)
+2. Builds emotional momentum (story arc)
+3. Delivers life-changing insights
+4. Multiple powerful moments
+5. Strong closing that inspires action
 
-    print("\n✍️  Generating script with Claude...")
+Use natural punctuation for pacing:
+- ??? for emphasis
+- — for dramatic pauses
+- ... for reflection
+- ! for power moments
+
+Make it sound like a powerful mentor sharing breakthrough wisdom!
+NO emotion tags - pure clean powerful delivery!"""
+
+    print("\n✍️  Generating MOTIVATIONAL script with Claude...")
     
     message = client.messages.create(
         model="claude-sonnet-4-20250514",
@@ -89,158 +106,154 @@ Make it suitable for professional YouTube narration."""
     return script_text
 
 
-def verify_script_calm(script_text):
+def clean_script_tags(script_text):
     """
-    VERIFICATION 1: Check if script is calm and measured.
-    """
-    
-    print("\n🔍 Verification 1: Checking calm delivery...")
-    
-    # Check for emotion tags
-    forbidden_tags = ['[serious]', '[excited]', '[pause]', '[sad]', '[happy]', '[dramatic]']
-    
-    for tag in forbidden_tags:
-        if tag in script_text:
-            print(f"  ⚠️  Found emotion tag: {tag}")
-            # Remove it
-            script_text = script_text.replace(tag, '')
-            print(f"  ✅ Removed: {tag}")
-    
-    # Check for ALL CAPS (indicates excitement)
-    import re
-    all_caps_words = len(re.findall(r'\b[A-Z]{3,}\b', script_text))
-    
-    if all_caps_words > 5:
-        print(f"  ⚠️  Found {all_caps_words} ALL CAPS words (too exciting)")
-        print(f"  Converting to normal case...")
-        # This is just a warning, we keep them as context matters
-    else:
-        print(f"  ✅ Calm tone verified (minimal ALL CAPS)")
-    
-    # Check for ellipsis (natural pausing)
-    ellipsis_count = script_text.count('...')
-    print(f"  ✅ Natural pauses (ellipsis): {ellipsis_count}")
-    
-    print(f"  ✅ Calm delivery verified!\n")
-    
-    return script_text
-
-
-def verify_script_hindi_pronunciation(script_text):
-    """
-    VERIFICATION 2: Check Hindi word pronunciation.
-    Ensure proper Hinglish usage.
+    Clean any emotion tags that might sneak in.
+    But keep punctuation-based energy signals.
     """
     
-    print("🔍 Verification 2: Checking Hindi pronunciation...")
+    print("\n🧹 Cleaning literal emotion tags...")
     
-    # Common Hindi words that should be in Hinglish format
-    hindi_words = {
-        'जिंदगी': 'life/living',
-        'सफलता': 'success',
-        'ज्ञान': 'wisdom',
-        'शक्ति': 'power',
-        'विचार': 'thought/idea',
+    # Remove tags that would be read literally
+    tags_to_remove = {
+        '[serious]': '',
+        '[excited]': '',
+        '[motivated]': '',
+        '[pause]': '...',
+        '[long pause]': '—',
+        '[emphasis]': '',
+        '[dramatic]': '',
+        '[powerful]': '',
     }
     
-    found_proper_hindi = 0
+    cleaned_count = 0
     
-    for hindi_word in hindi_words:
-        if hindi_word in script_text:
-            found_proper_hindi += 1
+    for tag, replacement in tags_to_remove.items():
+        if tag in script_text:
+            script_text = script_text.replace(tag, replacement)
+            cleaned_count += 1
+            print(f"  ✓ Removed: {tag}")
     
-    if found_proper_hindi > 0:
-        print(f"  ✅ Found {found_proper_hindi} Hindi words (good Hinglish mix)")
-    else:
-        print(f"  ℹ️  Could improve Hindi word integration")
-    
-    # Check for proper Roman transliteration
-    common_hinglish = ['naam', 'aaj', 'haan', 'bilkul', 'zaroor', 'seekho']
-    hinglish_count = sum(1 for word in common_hinglish if word in script_text.lower())
-    
-    if hinglish_count > 0:
-        print(f"  ✅ Hinglish elements found: {hinglish_count} words")
-    
-    print(f"  ✅ Hindi pronunciation verified!\n")
+    if cleaned_count == 0:
+        print(f"  ✓ No literal tags found (clean!)")
     
     return script_text
 
 
-def verify_script_length(script_text):
+def verify_motivational_energy(script_text):
     """
-    VERIFICATION 3: Check if script is approximately 2000 words.
+    Verify script has motivational energy.
+    Check for power keywords and pacing signals.
     """
     
-    print("🔍 Verification 3: Checking word count...")
+    print("\n🔍 Verification: Motivational Energy")
     
-    word_count = len(script_text.split())
-    char_count = len(script_text)
+    # Power keywords
+    power_keywords = [
+        'transform', 'powerful', 'breakthrough', 'unlock', 'master',
+        'unleash', 'incredible', 'amazing', 'revolutionary', 'life-changing'
+    ]
     
-    print(f"  Word count: {word_count} (target: 2000)")
-    print(f"  Character count: {char_count}")
+    power_words_found = 0
+    for keyword in power_keywords:
+        if keyword.lower() in script_text.lower():
+            power_words_found += 1
     
-    if 1800 <= word_count <= 2200:
-        print(f"  ✅ Perfect word count!")
-    elif word_count < 1800:
-        print(f"  ⚠️  Too short (need ~200 more words)")
+    print(f"  ✅ Power keywords found: {power_words_found}/10")
+    
+    # Energy punctuation
+    exclamations = script_text.count('!')
+    em_dashes = script_text.count('—')
+    ellipsis = script_text.count('...')
+    questions = script_text.count('?')
+    
+    print(f"  ✅ Energy markers:")
+    print(f"     - Exclamation (!): {exclamations}")
+    print(f"     - Em dash (—): {em_dashes}")
+    print(f"     - Ellipsis (...): {ellipsis}")
+    print(f"     - Questions (?): {questions}")
+    
+    total_energy = exclamations + em_dashes + ellipsis + questions
+    
+    if total_energy > 10:
+        print(f"  ✅ EXCELLENT motivational pacing! ({total_energy} energy markers)")
+    elif total_energy > 5:
+        print(f"  ✅ GOOD motivational energy ({total_energy} markers)")
     else:
-        print(f"  ⚠️  Too long (trim ~{word_count - 2000} words)")
+        print(f"  ⚠️  Could add more energy markers ({total_energy})")
     
     print()
     
     return script_text
 
 
+def verify_word_count(script_text):
+    """Check word count."""
+    
+    print("🔍 Verification: Word Count")
+    
+    word_count = len(script_text.split())
+    char_count = len(script_text)
+    
+    print(f"  Words: {word_count} (target: 2000)")
+    print(f"  Chars: {char_count}")
+    
+    if 1800 <= word_count <= 2200:
+        print(f"  ✅ Perfect!\n")
+    else:
+        print(f"  ⚠️  Adjust length\n")
+    
+    return script_text
+
+
 def main():
-    """Main flow."""
+    """Main."""
     
     print("\n" + "="*70)
-    print("GROW WITH BOOKS - SCRIPT GENERATION (VERIFIED CALM)")
+    print("GROW WITH BOOKS - MOTIVATIONAL SCRIPT GENERATION")
     print("="*70)
     
-    # Check API key
     if not os.environ.get("ANTHROPIC_API_KEY"):
         raise RuntimeError("❌ ANTHROPIC_API_KEY not set!")
     
-    # Load book
-    print("\n📚 Loading selected book...")
+    print("\n📚 Loading book...")
     book_data = load_selected_book()
-    print(f"  Book: {book_data.get('title', 'Unknown')}")
-    print(f"  Author: {book_data.get('author', 'Unknown')}")
+    print(f"  Book: {book_data.get('title')}")
+    print(f"  Author: {book_data.get('author')}")
     
-    # Generate script
-    print("\n✍️  Generating 2000-word script...")
-    script_text = generate_script_with_claude(book_data)
+    # Generate
+    script_text = generate_motivational_script(book_data)
     
-    # VERIFICATIONS
+    # Clean
+    script_text = clean_script_tags(script_text)
+    
+    # Verify
     print("\n🔍 VERIFICATIONS:")
     print("━"*70)
-    
-    script_text = verify_script_calm(script_text)
-    script_text = verify_script_hindi_pronunciation(script_text)
-    script_text = verify_script_length(script_text)
-    
+    script_text = verify_motivational_energy(script_text)
+    script_text = verify_word_count(script_text)
     print("━"*70)
     
-    # Save script
-    print("\n💾 Saving script...")
+    # Save
+    print("💾 Saving script...")
     
     output_data = {
-        "book": book_data.get('title', 'Unknown'),
-        "author": book_data.get('author', 'Unknown'),
+        "book": book_data.get('title'),
+        "author": book_data.get('author'),
         "theme": book_data.get('theme', ''),
         "keywords": book_data.get('keywords', []),
         "hashtags": book_data.get('hashtags', ''),
         "script": script_text,
         "word_count": len(script_text.split()),
         "character_count": len(script_text),
+        "style": "MOTIVATIONAL",
     }
     
     with open(SCRIPT_FILE, "w", encoding="utf-8") as f:
         json.dump(output_data, f, ensure_ascii=False, indent=2)
     
-    print(f"  ✅ Script saved: {SCRIPT_FILE}")
-    print(f"\n🎉 SUCCESS! Script ready for voice generation!\n")
+    print(f"  ✅ Saved: {SCRIPT_FILE}")
+    print(f"\n🎉 SUCCESS! Motivational script ready!\n")
 
 
 if __name__ == "__main__":
