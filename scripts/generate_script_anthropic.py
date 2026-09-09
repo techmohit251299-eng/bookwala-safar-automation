@@ -208,7 +208,7 @@ Keep response SHORT - just the issues or confirmation."""
 
     response = client.messages.create(
         model=MODEL,
-        max_tokens=500,
+        max_tokens=1500,
         messages=[{"role": "user", "content": verify_prompt}],
     )
 
@@ -245,7 +245,7 @@ Keep response SHORT."""
 
     response = client.messages.create(
         model=MODEL,
-        max_tokens=500,
+        max_tokens=1500,
         messages=[{"role": "user", "content": verify_prompt}],
     )
 
