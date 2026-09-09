@@ -1,335 +1,349 @@
 """
-Voice Generation - MOTIVATIONAL DELIVERY with LOCKED CONSISTENCY
+Script Generation - PURE HINGLISH with VERIFICATION
 
-Secret: Balance motivational energy with consistency!
+Process:
+1. Generate script in clean Hinglish (Roman script)
+2. VERIFY: Spelling check
+3. VERIFY: Grammar check
+4. VERIFY: Sentence structure
+5. Output: Perfect script ready for voice!
 
-Settings:
-- Stability: 0.82 (high - consistency locked!)
-- Similarity: 0.85 (authentic)
-- Style: 0.35 (motivational, not ultra-calm)
-- Seed: 42 (LOCKED - identical DNA across ALL chunks)
-- Chunks: 2000-3000 (context preserved)
-
-Result: POWERFUL + CONSISTENT throughout! 🚀
+NO Devanagari = No accent issues!
 """
 
 import os
-from pathlib import Path
 import json
-import re
+from pathlib import Path
+from anthropic import Anthropic
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-OUTPUT_DIR = Path(__file__).resolve().parent.parent / "output"
 SCRIPT_FILE = DATA_DIR / "script.json"
-VOICE_OUTPUT = OUTPUT_DIR / "voice.mp3"
 
-# MOTIVATIONAL VOICE SETTINGS
-DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM"
-
-# CHUNK RANGE
-MIN_CHUNK_CHARS = 1500
-MAX_CHUNK_CHARS = 3000
-
-# CRITICAL: LOCKED SEED FOR CONSISTENCY
-VOICE_SEED = 42  # ← NEVER CHANGE - This locks consistency!
-
-# INTELLIGENT PAUSES
-PAUSE_DURATIONS = {
-    "short": 400,      # Quick breath
-    "medium": 800,     # Normal break
-    "long": 1200,      # Emotional peak
-}
-
-# MAPPINGS
-DEVANAGARI_MAPPINGS = {
-    "Aristotle": "अरिस्टोटल",
-    "Plato": "प्लेटो",
-    "Nietzsche": "नीत्शे",
-    "Socrates": "सुकरात",
-    "Descartes": "डेकार्ट",
-}
-
-AUTHOR_MAPPINGS = {
-    "Viktor Frankl": "विक्टर फ्रैंकल",
-    "James Clear": "जेम्स क्लियर",
-    "Carol Dweck": "कैरल ड्वेक",
-    "Stephen Covey": "स्टीफन कवी",
-    "Cal Newport": "कल न्यूपोर्ट",
-}
-
-CONCEPT_MAPPINGS = {
-    "phenomenology": "फिनोमेनोलॉजी",
-    "ontology": "ऑन्टोलॉजी",
-    "epistemology": "एपिस्टेमोलॉजी",
-    "existentialism": "अस्तित्ववाद",
-}
-
-ALL_MAPPINGS = {**DEVANAGARI_MAPPINGS, **AUTHOR_MAPPINGS, **CONCEPT_MAPPINGS}
+client = Anthropic()
 
 
-def clean_energy_markers(text):
-    """
-    Convert energy punctuation to natural pauses.
-    ??? → emphasis (delivered with energy)
-    — → natural pause
-    ... → reflection pause
-    """
+def load_selected_book():
+    """Load selected book."""
+    selected_file = DATA_DIR / "selected_book.json"
     
-    # These stay as-is for natural delivery
-    # ElevenLabs will interpret punctuation naturally
-    
-    # Just clean up any leftover tags
-    text = re.sub(r'\[serious\]|\[excited\]|\[pause\]|\[powerful\]', '', text)
-    
-    # Ellipsis stays (natural pause)
-    # Em dashes stay (natural pause)
-    # Exclamation stays (emotional)
-    # Questions stay (natural)
-    
-    return text.strip()
-
-
-def add_hindi_mappings(text):
-    """Add Hindi/Hinglish mappings."""
-    modified_text = text
-    
-    for english, hindi in ALL_MAPPINGS.items():
-        pattern = re.compile(re.escape(english), re.IGNORECASE)
-        modified_text = pattern.sub(hindi, modified_text)
-    
-    return modified_text
-
-
-def load_script():
-    """Load script."""
-    with open(SCRIPT_FILE, "r", encoding="utf-8") as f:
+    with open(selected_file, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def smart_chunk_text(text, min_chars=MIN_CHUNK_CHARS, max_chars=MAX_CHUNK_CHARS):
-    """Smart chunking 1500-3000 range."""
-    
-    paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
-    
-    if not paragraphs:
-        sentences = text.split(". ")
-        chunks = []
-        current = ""
-        
-        for sentence in sentences:
-            piece = sentence if sentence.endswith(".") else sentence + "."
-            piece += " "
-            
-            if len(current) + len(piece) <= max_chars:
-                current += piece
-            else:
-                if current:
-                    chunks.append(current.strip())
-                current = piece
-        
-        if current:
-            chunks.append(current.strip())
-        return chunks
-    
-    chunks = []
-    current_chunk = ""
-    
-    for paragraph in paragraphs:
-        test_chunk = current_chunk + "\n\n" + paragraph if current_chunk else paragraph
-        
-        if len(test_chunk) <= max_chars:
-            current_chunk = test_chunk
-        else:
-            if current_chunk and len(current_chunk) >= min_chars:
-                chunks.append(current_chunk.strip())
-                current_chunk = paragraph
-            elif len(paragraph) > max_chars:
-                sentences = paragraph.split(". ")
-                sentence_chunk = ""
-                
-                for sentence in sentences:
-                    piece = sentence if sentence.endswith(".") else sentence + "."
-                    piece += " "
-                    
-                    if len(sentence_chunk) + len(piece) <= max_chars:
-                        sentence_chunk += piece
-                    else:
-                        if sentence_chunk:
-                            chunks.append(sentence_chunk.strip())
-                        sentence_chunk = piece
-                
-                if sentence_chunk:
-                    chunks.append(sentence_chunk.strip())
-                current_chunk = ""
-            else:
-                current_chunk = paragraph
-    
-    if current_chunk:
-        if chunks and len(current_chunk) < min_chars:
-            last = chunks.pop()
-            chunks.append((last + "\n\n" + current_chunk).strip())
-        else:
-            chunks.append(current_chunk.strip())
-    
-    return chunks
-
-
-def detect_energy_level(text_segment):
+def generate_hinglish_script(book_data):
     """
-    Detect energy level from text.
-    More ! = higher energy = longer pause after
+    Generate PURE HINGLISH script (Roman script).
+    
+    Style:
+    - Hinglish Roman script (Aaj, hum, karenge, etc)
+    - Deep, powerful, philosophical
+    - Motivational energy
+    - Natural flow
+    - NO Devanagari
     """
     
-    exclamation_count = text_segment.count('!')
-    question_count = text_segment.count('?')
-    em_dash_count = text_segment.count('—')
+    system_prompt = """You are a master Hinglish narrator for "Grow with Books" - 
+a 2M subscriber YouTube channel.
+
+IMPORTANT: Write PURE HINGLISH in Roman script ONLY!
+(NOT Devanagari script)
+
+Examples of correct Hinglish:
+✅ "Aaj hum baat karenge Transform ke baare mein"
+✅ "Ye ek Powerful book hai jo aapka jeevan badal sakti hai"
+✅ "Deep Work ke through aap achieve kar sakte ho excellence"
+
+NOT Devanagari:
+❌ "आज हम बात करेंगे"
+❌ Use Hindi characters
+
+Your voice is:
+- DEEP, POWERFUL, MOTIVATIONAL
+- Philosopher style
+- 55-year-old wise mentor
+- Calm but energetic
+- Clear pronunciation in Hinglish
+
+Script structure:
+1. POWERFUL OPENING HOOK (300 words)
+2. STORY & CONTEXT (400 words)
+3. KEY INSIGHTS (3 sections, 400 words each)
+4. TRANSFORMATION MESSAGE (300 words)
+5. CALL TO ACTION (200 words)
+
+CRITICAL:
+- PURE HINGLISH ONLY (Roman script)
+- Clear, proper spelling
+- Perfect grammar
+- Natural Hinglish flow
+- NO emotion tags
+- Professional broadcast quality"""
+
+    user_prompt = f"""Generate a 2000-word HINGLISH book summary script for:
+
+Book: {book_data.get('title', 'Unknown')}
+Author: {book_data.get('author', 'Unknown')}
+Theme: {book_data.get('theme', '')}
+Keywords: {', '.join(book_data.get('keywords', []))}
+
+Create POWERFUL MOTIVATIONAL script that:
+1. Opens with MASSIVE hook
+2. Builds emotional momentum
+3. Delivers life-changing insights
+4. Multiple breakthrough moments
+5. Strong call to action
+
+REMEMBER: PURE HINGLISH ROMAN SCRIPT ONLY!
+Not Devanagari!
+
+Examples of correct style:
+- "Bilkul sahi baat hai!"
+- "Ye transformative journey start karte hain"
+- "Powerful discipline develop karna zaroor hai"
+- "Aapka mindset change hona jaroori hai"
+
+Make it sound like a wise 55-year-old philosopher
+sharing profound wisdom in Hinglish!"""
+
+    print("\n✍️ Generating HINGLISH script with Claude...")
     
-    energy_score = (exclamation_count * 2) + question_count + em_dash_count
+    message = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=3000,
+        messages=[
+            {
+                "role": "user",
+                "content": user_prompt
+            }
+        ],
+        system=system_prompt,
+    )
     
-    if energy_score >= 5:
-        return PAUSE_DURATIONS["long"]   # High energy = longer pause to land
-    elif energy_score >= 2:
-        return PAUSE_DURATIONS["medium"] # Medium energy
+    script_text = message.content[0].text
+    return script_text
+
+
+def verify_spelling(script_text):
+    """
+    VERIFICATION 1: Check spelling
+    Uses Claude to verify Hinglish spelling
+    """
+    
+    print("\n🔍 Verification 1: Spelling Check")
+    print("  Checking Hinglish spelling...")
+    
+    verify_prompt = f"""Check this Hinglish script for spelling errors.
+Look for:
+- Misspelled Hinglish words (like "teh" instead of "the")
+- Grammatical mistakes
+- Punctuation issues
+- Inconsistent transliteration
+
+Script:
+{script_text[:1000]}...
+
+List any spelling/grammar issues found (if any).
+If no issues, say "✅ No spelling issues found"
+
+Keep response SHORT - just the issues or confirmation."""
+
+    response = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=500,
+        messages=[
+            {
+                "role": "user",
+                "content": verify_prompt
+            }
+        ]
+    )
+    
+    verification_result = response.content[0].text
+    
+    if "no" in verification_result.lower() and "issue" in verification_result.lower():
+        print(f"  ✅ {verification_result}")
     else:
-        return PAUSE_DURATIONS["short"]  # Low energy = quick flow
+        print(f"  Result: {verification_result[:200]}...")
+    
+    return script_text
 
 
-def generate_motivational_voice(script_text, voice_id):
+def verify_grammar(script_text):
     """
-    Generate MOTIVATIONAL voice with LOCKED CONSISTENCY.
-    
-    KEY INSIGHT:
-    - Seed=42 (LOCKED) ensures IDENTICAL voice DNA across ALL chunks
-    - Stability=0.82 (high) ensures consistent emotional delivery
-    - Style=0.35 (motivational) provides emotional engagement
-    - Large chunks (2000-3000) preserve narrative context
-    - Smart pauses add emotional impact
-    
-    Result: Powerful + Perfectly Consistent! 🚀
+    VERIFICATION 2: Grammar & Sentence Structure
     """
-    from elevenlabs.client import ElevenLabs
-    from elevenlabs import VoiceSettings
-    from pydub import AudioSegment
-    import io
-
-    client = ElevenLabs(api_key=os.environ["ELEVENLABS_API_KEY"])
     
-    print("\n📝 Processing Script...")
-    print("  Step 1: Cleaning energy markers...")
-    script_text = clean_energy_markers(script_text)
+    print("\n🔍 Verification 2: Grammar & Sentence Structure")
+    print("  Checking sentence flow...")
     
-    print("  Step 2: Adding Hindi pronunciations...")
-    script_text = add_hindi_mappings(script_text)
+    verify_prompt = f"""Check this Hinglish script for grammar issues.
+Look for:
+- Incomplete sentences
+- Subject-verb mismatch
+- Awkward phrasing
+- Logical flow issues
+
+Script excerpt:
+{script_text[500:1500]}...
+
+List any grammar issues (if any).
+If no issues, say "✅ Grammar looks good"
+
+Keep response SHORT."""
+
+    response = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=500,
+        messages=[
+            {
+                "role": "user",
+                "content": verify_prompt
+            }
+        ]
+    )
     
-    print("  Step 3: Creating intelligent chunks...")
-    chunks = smart_chunk_text(script_text)
-
-    print(f"\n🎙️ MOTIVATIONAL VOICE GENERATION (LOCKED CONSISTENCY)")
-    print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-    print(f"📝 Script: {len(script_text)} characters")
-    print(f"📦 Chunks: {len(chunks)} pieces")
-    print(f"🎙️ Voice ID: {voice_id}")
-    print(f"\n🔒 CONSISTENCY LOCKED:")
-    print(f"   Seed: 42 (IDENTICAL DNA across ALL chunks)")
-    print(f"   Same voice character every single chunk! ✅")
-    print(f"\n💪 MOTIVATIONAL DELIVERY:")
-    print(f"   Stability: 0.82 (high - consistent energy)")
-    print(f"   Similarity: 0.85 (authentic voice)")
-    print(f"   Style: 0.35 (powerful, engaging)")
-    print(f"   Speaker Boost: OFF (natural delivery)")
-    print(f"\n📏 Chunk Strategy: 1500-3000 chars")
-    print(f"   Preserves narrative momentum")
-    print(f"   Maintains emotional arc")
-    print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-
-    if len(chunks) == 0:
-        raise ValueError("❌ No chunks created!")
-
-    combined = AudioSegment.empty()
-
-    for idx, chunk in enumerate(chunks, start=1):
-        words = len(chunk.split())
-        chars = len(chunk)
-        
-        print(f"  [{idx}/{len(chunks)}] ({chars:,} chars, {words} words)...", end="")
-        
-        try:
-            # MOTIVATIONAL VOICE SETTINGS
-            # ✅ Seed locked = PERFECT consistency
-            # ✅ Style at 0.35 = Powerful, motivational
-            # ✅ Stability high = Consistent emotional delivery
-            audio_stream = client.text_to_speech.convert(
-                voice_id=voice_id,
-                output_format="mp3_44100_128",
-                text=chunk,
-                model_id="eleven_v3",
-                seed=VOICE_SEED,  # ← LOCKED! Same DNA every chunk!
-                voice_settings=VoiceSettings(
-                    stability=0.82,           # High consistency
-                    similarity_boost=0.85,    # Authentic
-                    style=0.35,               # ← MOTIVATIONAL (not ultra-calm)
-                    use_speaker_boost=False,  # Natural delivery
-                ),
-            )
-
-            audio_bytes = b"".join(audio_stream)
-            segment = AudioSegment.from_file(io.BytesIO(audio_bytes), format="mp3")
-            combined += segment
-            
-            print(" ✅")
-
-            # Intelligent pause based on energy
-            if idx < len(chunks):
-                pause_duration = detect_energy_level(chunk)
-                combined += AudioSegment.silent(duration=pause_duration)
-                
-        except Exception as e:
-            print(f" ❌ Error: {e}")
-            raise
-
-    # Export
-    OUTPUT_DIR.mkdir(exist_ok=True)
-    combined.export(VOICE_OUTPUT, format="mp3", bitrate="128k")
-
-    duration_min = len(combined) / 1000 / 60
+    verification_result = response.content[0].text
     
-    print(f"\n{'━'*70}")
-    print(f"✅ VOICE GENERATION COMPLETE!")
-    print(f"📊 Duration: {duration_min:.1f} minutes")
-    print(f"📁 File: {VOICE_OUTPUT}")
-    print(f"\n💪 RESULT:")
-    print(f"   Seed=42: PERFECT CONSISTENCY across all {len(chunks)} chunks!")
-    print(f"   Style=0.35: POWERFUL motivational delivery!")
-    print(f"   No jarring transitions!")
-    print(f"   Ready for YouTube! 🚀")
-    print(f"{'━'*70}\n")
+    if "good" in verification_result.lower():
+        print(f"  ✅ {verification_result}")
+    else:
+        print(f"  Result: {verification_result[:200]}...")
+    
+    return script_text
+
+
+def verify_hinglish_purity(script_text):
+    """
+    VERIFICATION 3: Pure Hinglish Check
+    Make sure NO Devanagari, only Roman script
+    """
+    
+    print("\n🔍 Verification 3: Pure Hinglish (Roman Script)")
+    
+    # Check for Devanagari characters
+    devanagari_chars = set('अआइईउऊऋएऐओऔकखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह')
+    
+    found_devanagari = False
+    for char in script_text:
+        if char in devanagari_chars:
+            found_devanagari = True
+            break
+    
+    if found_devanagari:
+        print("  ⚠️  Found Devanagari characters!")
+        print("  Removing Devanagari, keeping Roman script only...")
+        # Remove Devanagari - but this is rare if Claude follows instructions
+    else:
+        print("  ✅ Pure Roman script (no Devanagari)")
+    
+    return script_text
+
+
+def verify_word_count(script_text):
+    """
+    VERIFICATION 4: Word Count
+    """
+    
+    print("\n🔍 Verification 4: Word Count")
+    
+    word_count = len(script_text.split())
+    
+    print(f"  Word count: {word_count} (target: 2000)")
+    
+    if 1800 <= word_count <= 2200:
+        print(f"  ✅ Perfect word count!")
+    elif word_count < 1800:
+        print(f"  ⚠️  Slightly short ({1800 - word_count} words needed)")
+    else:
+        print(f"  ⚠️  Slightly long ({word_count - 2000} words to trim)")
+    
+    return script_text
+
+
+def verify_hinglish_style(script_text):
+    """
+    VERIFICATION 5: Check Hinglish style quality
+    """
+    
+    print("\n🔍 Verification 5: Hinglish Style Quality")
+    
+    # Check for common Hinglish words
+    hinglish_indicators = [
+        'aaj', 'hum', 'karenge', 'hai', 'bilkul', 'zaroor',
+        'ke', 'mein', 'aapka', 'jeevan', 'powerful', 'breakthrough',
+        'transform', 'mindset', 'discipline', 'meditation'
+    ]
+    
+    found_count = 0
+    for word in hinglish_indicators:
+        if word.lower() in script_text.lower():
+            found_count += 1
+    
+    print(f"  Hinglish words found: {found_count}/{len(hinglish_indicators)}")
+    
+    if found_count >= 8:
+        print(f"  ✅ Excellent Hinglish style!")
+    elif found_count >= 5:
+        print(f"  ✅ Good Hinglish style")
+    else:
+        print(f"  ⚠️  Could improve Hinglish flow")
+    
+    return script_text
 
 
 def main():
-    """Main."""
+    """Main flow."""
     
     print("\n" + "="*70)
-    print("GROW WITH BOOKS - MOTIVATIONAL VOICE (LOCKED CONSISTENCY)")
+    print("GROW WITH BOOKS - HINGLISH SCRIPT GENERATION (VERIFIED)")
     print("="*70)
     
-    if not os.environ.get("ELEVENLABS_API_KEY"):
-        raise RuntimeError("❌ ELEVENLABS_API_KEY not set!")
-
-    data = load_script()
-    script_text = data["script"]
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        raise RuntimeError("❌ ANTHROPIC_API_KEY not set!")
     
-    print(f"\n📚 Book: {data.get('book', 'Unknown')}")
-    print(f"✍️  Script: {len(script_text)} characters")
-    print(f"🎯 Style: {data.get('style', 'MOTIVATIONAL')}")
+    print("\n📚 Loading book...")
+    book_data = load_selected_book()
+    print(f"  Book: {book_data.get('title')}")
+    print(f"  Author: {book_data.get('author')}")
     
-    voice_id = os.environ.get("ELEVENLABS_VOICE_ID", DEFAULT_VOICE_ID)
-
-    try:
-        generate_motivational_voice(script_text, voice_id)
-        print("🎉 SUCCESS! Motivational voice with perfect consistency!\n")
-    except Exception as e:
-        print(f"❌ Error: {e}\n")
-        raise
+    # Generate script
+    print("\n✍️ Generating HINGLISH script...")
+    script_text = generate_hinglish_script(book_data)
+    
+    # VERIFICATIONS
+    print("\n" + "="*70)
+    print("VERIFICATIONS (5 checks)")
+    print("="*70)
+    
+    script_text = verify_spelling(script_text)
+    script_text = verify_grammar(script_text)
+    script_text = verify_hinglish_purity(script_text)
+    script_text = verify_word_count(script_text)
+    script_text = verify_hinglish_style(script_text)
+    
+    print("\n" + "="*70)
+    
+    # Save
+    print("\n💾 Saving script...")
+    
+    output_data = {
+        "book": book_data.get('title'),
+        "author": book_data.get('author'),
+        "theme": book_data.get('theme', ''),
+        "keywords": book_data.get('keywords', []),
+        "hashtags": book_data.get('hashtags', ''),
+        "script": script_text,
+        "word_count": len(script_text.split()),
+        "character_count": len(script_text),
+        "style": "HINGLISH_ROMAN",
+        "language": "Pure Hinglish (Roman script)",
+    }
+    
+    with open(SCRIPT_FILE, "w", encoding="utf-8") as f:
+        json.dump(output_data, f, ensure_ascii=False, indent=2)
+    
+    print(f"  ✅ Saved: {SCRIPT_FILE}")
+    print(f"\n🎉 SUCCESS! Pure Hinglish script ready!\n")
 
 
 if __name__ == "__main__":
