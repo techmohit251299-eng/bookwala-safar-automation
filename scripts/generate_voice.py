@@ -24,6 +24,10 @@ SCRIPT_FILE = DATA_DIR / "script.json"
 VOICE_OUTPUT = OUTPUT_DIR / "voice.mp3"
 
 # VOICE SETTINGS - DEEP POWERFUL PHILOSOPHER
+# NOTE: this is ElevenLabs' stock "Rachel" voice ID - used ONLY as a fallback
+# if ELEVENLABS_VOICE_ID isn't set in GitHub Actions secrets. Make sure the
+# secret is set to your "Taksh - Calm, Serious and Smooth" voice ID, or this
+# fallback voice (not Taksh) will be used instead.
 DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM"
 
 # CHUNK SIZE - LARGE FOR CONTEXT
@@ -52,36 +56,36 @@ def smart_chunk_text(text, min_chars=MIN_CHUNK_CHARS, max_chars=MAX_CHUNK_CHARS)
     Smart chunking for HINGLISH text.
     Preserves paragraph/sentence boundaries.
     """
-    
+
     paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
-    
+
     if not paragraphs:
         # Fallback: split by sentences
         sentences = text.split(". ")
         chunks = []
         current = ""
-        
+
         for sentence in sentences:
             piece = sentence if sentence.endswith(".") else sentence + "."
             piece += " "
-            
+
             if len(current) + len(piece) <= max_chars:
                 current += piece
             else:
                 if current:
                     chunks.append(current.strip())
                 current = piece
-        
+
         if current:
             chunks.append(current.strip())
         return chunks
-    
+
     chunks = []
     current_chunk = ""
-    
+
     for paragraph in paragraphs:
         test_chunk = current_chunk + "\n\n" + paragraph if current_chunk else paragraph
-        
+
         if len(test_chunk) <= max_chars:
             current_chunk = test_chunk
         else:
@@ -92,24 +96,24 @@ def smart_chunk_text(text, min_chars=MIN_CHUNK_CHARS, max_chars=MAX_CHUNK_CHARS)
                 # Split long paragraph by sentences
                 sentences = paragraph.split(". ")
                 sentence_chunk = ""
-                
+
                 for sentence in sentences:
                     piece = sentence if sentence.endswith(".") else sentence + "."
                     piece += " "
-                    
+
                     if len(sentence_chunk) + len(piece) <= max_chars:
                         sentence_chunk += piece
                     else:
                         if sentence_chunk:
                             chunks.append(sentence_chunk.strip())
                         sentence_chunk = piece
-                
+
                 if sentence_chunk:
                     chunks.append(sentence_chunk.strip())
                 current_chunk = ""
             else:
                 current_chunk = paragraph
-    
+
     if current_chunk:
         if chunks and len(current_chunk) < min_chars:
             # Merge with last chunk
@@ -117,7 +121,7 @@ def smart_chunk_text(text, min_chars=MIN_CHUNK_CHARS, max_chars=MAX_CHUNK_CHARS)
             chunks.append((last + "\n\n" + current_chunk).strip())
         else:
             chunks.append(current_chunk.strip())
-    
+
     return chunks
 
 
@@ -126,16 +130,16 @@ def detect_power_moment(text_segment):
     Detect powerful moments from punctuation/words.
     Add longer pause after powerful statements.
     """
-    
+
     power_indicators = ['!', '???', '—', 'powerful', 'breakthrough', 'transform', 'unlock']
-    
+
     power_score = text_segment.count('!') * 2
     power_score += text_segment.count('???')
-    
+
     for indicator in power_indicators:
         if indicator in text_segment.lower():
             power_score += 1
-    
+
     if power_score >= 3:
         return PAUSE_DURATIONS["long"]    # 1000ms - Let it land!
     elif power_score >= 1:
@@ -147,14 +151,14 @@ def detect_power_moment(text_segment):
 def generate_deep_powerful_voice(script_text, voice_id):
     """
     Generate DEEP POWERFUL PHILOSOPHER voice with LOCKED CONSISTENCY.
-    
+
     Voice Character:
     - 55-year-old wise philosopher
     - Deep, resonant voice
     - Calm but powerful
     - Measured delivery
     - Motivational energy
-    
+
     Consistency:
     - Seed=42 LOCKED (identical DNA all chunks!)
     - Stability=0.80 (high consistency)
@@ -167,7 +171,7 @@ def generate_deep_powerful_voice(script_text, voice_id):
     import io
 
     client = ElevenLabs(api_key=os.environ["ELEVENLABS_API_KEY"])
-    
+
     print("\n📝 Processing Hinglish script...")
     chunks = smart_chunk_text(script_text)
 
@@ -202,9 +206,9 @@ def generate_deep_powerful_voice(script_text, voice_id):
     for idx, chunk in enumerate(chunks, start=1):
         words = len(chunk.split())
         chars = len(chunk)
-        
+
         print(f"  [{idx}/{len(chunks)}] ({chars:,} chars, {words} words)...", end="", flush=True)
-        
+
         try:
             # ✅ DEEP POWERFUL PHILOSOPHER VOICE SETTINGS
             # Seed=42 is LOCKED - this ensures perfect consistency!
@@ -225,14 +229,14 @@ def generate_deep_powerful_voice(script_text, voice_id):
             audio_bytes = b"".join(audio_stream)
             segment = AudioSegment.from_file(io.BytesIO(audio_bytes), format="mp3")
             combined += segment
-            
+
             print(" ✅", flush=True)
 
             # Smart pause based on power moments
             if idx < len(chunks):
                 pause_duration = detect_power_moment(chunk)
                 combined += AudioSegment.silent(duration=pause_duration)
-                
+
         except Exception as e:
             print(f" ❌ Error: {e}", flush=True)
             raise
@@ -242,7 +246,7 @@ def generate_deep_powerful_voice(script_text, voice_id):
     combined.export(VOICE_OUTPUT, format="mp3", bitrate="128k")
 
     duration_min = len(combined) / 1000 / 60
-    
+
     print(f"\n{'━'*70}")
     print(f"✅ VOICE GENERATION COMPLETE!")
     print(f"📊 Duration: {duration_min:.1f} minutes")
@@ -262,21 +266,21 @@ def generate_deep_powerful_voice(script_text, voice_id):
 
 def main():
     """Main."""
-    
+
     print("\n" + "="*70)
     print("GROW WITH BOOKS - DEEP POWERFUL PHILOSOPHER VOICE")
     print("="*70)
-    
+
     if not os.environ.get("ELEVENLABS_API_KEY"):
         raise RuntimeError("❌ ELEVENLABS_API_KEY not set!")
 
     data = load_script()
     script_text = data["script"]
-    
+
     print(f"\n📚 Book: {data.get('book', 'Unknown')}")
     print(f"✍️  Script: {len(script_text)} characters (Pure Hinglish)")
     print(f"🎙️ Voice ID: {os.environ.get('ELEVENLABS_VOICE_ID', 'DEFAULT')}")
-    
+
     voice_id = os.environ.get("ELEVENLABS_VOICE_ID", DEFAULT_VOICE_ID)
 
     try:
