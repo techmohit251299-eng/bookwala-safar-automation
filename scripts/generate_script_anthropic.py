@@ -105,6 +105,15 @@ CRITICAL:
   naturally from where the previous section left off (context will be given)."""
 
 
+def extract_text(message):
+    """Safely pull the text block out of a Claude response, skipping any
+    ThinkingBlock (or other non-text blocks) that may come before it."""
+    for block in message.content:
+        if block.type == "text":
+            return block.text.strip()
+    raise ValueError("❌ No text block found in Claude's response!")
+
+
 def load_selected_book():
     """Load selected book."""
     selected_file = DATA_DIR / "selected_book.json"
@@ -153,7 +162,7 @@ Write ONLY this section's text - no headers, no labels, no meta commentary."""
         system=BASE_SYSTEM_PROMPT,
     )
 
-    return message.content[0].text.strip()
+    return extract_text(message)
 
 
 def generate_hinglish_script(book_data):
@@ -203,7 +212,7 @@ Keep response SHORT - just the issues or confirmation."""
         messages=[{"role": "user", "content": verify_prompt}],
     )
 
-    verification_result = response.content[0].text
+    verification_result = extract_text(response)
 
     if "no" in verification_result.lower() and "issue" in verification_result.lower():
         print(f"  ✅ {verification_result}")
@@ -240,7 +249,7 @@ Keep response SHORT."""
         messages=[{"role": "user", "content": verify_prompt}],
     )
 
-    verification_result = response.content[0].text
+    verification_result = extract_text(response)
 
     if "good" in verification_result.lower():
         print(f"  ✅ {verification_result}")
