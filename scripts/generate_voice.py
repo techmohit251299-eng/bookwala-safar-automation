@@ -226,7 +226,7 @@ def generate_deep_powerful_voice(script_text, voice_id):
     print(f"\n🎙️ TECHNICAL SETTINGS:")
     print(f"   Stability: 0.80 (high - consistent emotion)")
     print(f"   Similarity: 0.88 (very authentic)")
-    print(f"   Style: 0.40 (powerful, engaging)")
+    print(f"   Style: 0.30 (calmer, less dramatic)")
     print(f"   Speaker Boost: OFF (natural delivery)")
     print(f"\n📏 Chunk strategy: 1800-3200 chars")
     print(f"   Large chunks = context preserved")
@@ -261,7 +261,7 @@ def generate_deep_powerful_voice(script_text, voice_id):
                 voice_settings=VoiceSettings(
                     stability=0.80,           # High consistency
                     similarity_boost=0.88,    # Very authentic
-                    style=0.40,               # Powerful, motivational
+                    style=0.30,               # Calmer, less dramatic - toned down from 0.40
                     use_speaker_boost=False,  # Natural philosopher tone
                 ),
             )
