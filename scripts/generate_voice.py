@@ -9,6 +9,8 @@ Features:
 5. PERFECT HINGLISH pronunciation
 6. Chunk consistency maintained
 7. Philosopher 55+ character
+8. Per-chunk "..." lead-in (each chunk is its own TTS API call, so each
+   one gets a fresh warm-up pause - fixes mispronounced opening words)
 
 NO MAPPINGS - Just clean Hinglish!
 """
@@ -43,6 +45,11 @@ PAUSE_DURATIONS = {
     "medium": 700,     # Normal break
     "long": 1000,      # Powerful moment
 }
+
+# Extra silence (ms) inserted BEFORE the very first chunk's audio, on top of
+# the text-level "..." - belt and suspenders so the opening word never gets
+# clipped or mispronounced.
+LEAD_IN_SILENCE_MS = 400
 
 
 def load_script():
@@ -125,6 +132,22 @@ def smart_chunk_text(text, min_chars=MIN_CHUNK_CHARS, max_chars=MAX_CHUNK_CHARS)
     return chunks
 
 
+def ensure_chunk_pause(chunk_text):
+    """
+    Guarantee every chunk begins with '...' before it's sent to ElevenLabs.
+
+    WHY THIS MATTERS: each chunk is synthesized in its own separate API call
+    (see the convert() call in generate_deep_powerful_voice). That means the
+    TTS engine has no "warm up" context at the start of EVERY chunk, not just
+    the start of the whole script - so the opening word of every single chunk
+    is at risk of being mispronounced/clipped, not just the very first one.
+    """
+    stripped = chunk_text.lstrip()
+    if stripped.startswith("..."):
+        return stripped
+    return "... " + stripped
+
+
 def detect_power_moment(text_segment):
     """
     Detect powerful moments from punctuation/words.
@@ -164,6 +187,7 @@ def generate_deep_powerful_voice(script_text, voice_id):
     - Stability=0.80 (high consistency)
     - Large chunks (1800-3200 chars)
     - Perfect Hinglish pronunciation
+    - Every chunk gets its own "..." lead-in (see ensure_chunk_pause)
     """
     from elevenlabs.client import ElevenLabs
     from elevenlabs import VoiceSettings
@@ -196,12 +220,13 @@ def generate_deep_powerful_voice(script_text, voice_id):
     print(f"\n📏 Chunk strategy: 1800-3200 chars")
     print(f"   Large chunks = context preserved")
     print(f"   Natural narrative flow maintained")
+    print(f"   Each chunk gets its own '...' lead-in pause")
     print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
 
     if len(chunks) == 0:
         raise ValueError("❌ No chunks created!")
 
-    combined = AudioSegment.empty()
+    combined = AudioSegment.silent(duration=LEAD_IN_SILENCE_MS)
 
     for idx, chunk in enumerate(chunks, start=1):
         words = len(chunk.split())
@@ -209,13 +234,17 @@ def generate_deep_powerful_voice(script_text, voice_id):
 
         print(f"  [{idx}/{len(chunks)}] ({chars:,} chars, {words} words)...", end="", flush=True)
 
+        # Add the guaranteed "..." lead-in so THIS chunk's opening word is
+        # pronounced correctly, since it's a brand new TTS API call.
+        chunk_for_tts = ensure_chunk_pause(chunk)
+
         try:
             # ✅ DEEP POWERFUL PHILOSOPHER VOICE SETTINGS
             # Seed=42 is LOCKED - this ensures perfect consistency!
             audio_stream = client.text_to_speech.convert(
                 voice_id=voice_id,
                 output_format="mp3_44100_128",
-                text=chunk,
+                text=chunk_for_tts,
                 model_id="eleven_v3",
                 seed=VOICE_SEED,  # ✅ LOCKED! Same DNA every chunk!
                 voice_settings=VoiceSettings(
