@@ -58,23 +58,35 @@ def load_script():
         return json.load(f)
 
 
+def split_into_sentences(text):
+    """
+    Split text into sentences, keeping the original terminal punctuation
+    intact - handles BOTH:
+      - Devanagari sentence-ending "।" (purna viram / danda)
+      - English/Hinglish "."
+    (previously this only split on ". " and force-appended "." to every
+    piece, which broke/garbled Devanagari sentences ending in "।")
+    """
+    pieces = re.split(r'(?<=[।.!?])\s+', text)
+    return [p.strip() for p in pieces if p.strip()]
+
+
 def smart_chunk_text(text, min_chars=MIN_CHUNK_CHARS, max_chars=MAX_CHUNK_CHARS):
     """
-    Smart chunking for HINGLISH text.
-    Preserves paragraph/sentence boundaries.
+    Smart chunking for Hinglish/Devanagari text.
+    Preserves paragraph/sentence boundaries (handles both "।" and ".").
     """
 
     paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
 
     if not paragraphs:
-        # Fallback: split by sentences
-        sentences = text.split(". ")
+        # Fallback: split by sentences (Devanagari "।" or English/Hinglish ".")
+        sentences = split_into_sentences(text)
         chunks = []
         current = ""
 
         for sentence in sentences:
-            piece = sentence if sentence.endswith(".") else sentence + "."
-            piece += " "
+            piece = sentence + " "
 
             if len(current) + len(piece) <= max_chars:
                 current += piece
@@ -100,13 +112,12 @@ def smart_chunk_text(text, min_chars=MIN_CHUNK_CHARS, max_chars=MAX_CHUNK_CHARS)
                 chunks.append(current_chunk.strip())
                 current_chunk = paragraph
             elif len(paragraph) > max_chars:
-                # Split long paragraph by sentences
-                sentences = paragraph.split(". ")
+                # Split long paragraph by sentences (Devanagari "।" or ".")
+                sentences = split_into_sentences(paragraph)
                 sentence_chunk = ""
 
                 for sentence in sentences:
-                    piece = sentence if sentence.endswith(".") else sentence + "."
-                    piece += " "
+                    piece = sentence + " "
 
                     if len(sentence_chunk) + len(piece) <= max_chars:
                         sentence_chunk += piece
@@ -287,7 +298,7 @@ def generate_deep_powerful_voice(script_text, voice_id):
     print(f"   ✅ DEEP powerful philosopher voice!")
     print(f"   ✅ CALM, measured delivery!")
     print(f"   ✅ Motivational energy throughout!")
-    print(f"   ✅ Pure Hinglish pronunciation!")
+    print(f"   ✅ Accurate Hinglish/Devanagari pronunciation!")
     print(f"   ✅ Professional 2M-subscriber quality!")
     print(f"\n🚀 Ready for YouTube!\n")
     print(f"{'━'*70}\n")
@@ -306,8 +317,10 @@ def main():
     data = load_script()
     script_text = data["script"]
 
+    script_style = data.get("style", "Unknown style")
+
     print(f"\n📚 Book: {data.get('book', 'Unknown')}")
-    print(f"✍️  Script: {len(script_text)} characters (Pure Hinglish)")
+    print(f"✍️  Script: {len(script_text)} characters ({script_style})")
     print(f"🎙️ Voice ID: {os.environ.get('ELEVENLABS_VOICE_ID', 'DEFAULT')}")
 
     voice_id = os.environ.get("ELEVENLABS_VOICE_ID", DEFAULT_VOICE_ID)
