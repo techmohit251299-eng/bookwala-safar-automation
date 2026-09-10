@@ -1,169 +1,434 @@
 [
-  {
-    "title": "Atomic Habits",
-    "author": "James Clear",
-    "theme": "small consistent actions, compound growth, discipline",
+ {
+    "title": "The Psychology of Money",
+    "author": "Morgan Housel",
+    "theme": "money, investing, financial behavior",
     "youtube_viability": "High",
-    "caption_style": "short emotional",
+    "caption_style": "thoughtful practical",
     "keywords": [
-      "habits",
-      "discipline",
-      "self-improvement",
-      "productivity"
+      "psychology of money",
+      "money mindset",
+      "investing",
+      "financial freedom"
     ],
-    "hashtags": "#atomichabits #habits #selfdevelopment #discipline #motivation",
-    "description": "1% daily improvement compounds into 37x better results. Massively viral for motivation + actionable tips.",
-    "used": true
-  },
-  {
-    "title": "Deep Work",
-    "author": "Cal Newport",
-    "theme": "focus, distraction-free work, meaningful productivity",
-    "youtube_viability": "High",
-    "caption_style": "long thoughtful",
-    "keywords": [
-      "deep work",
-      "focus",
-      "productivity",
-      "concentration"
-    ],
-    "hashtags": "#deepwork #focus #productivity #concentration #mindfulness",
-    "description": "In age of constant distraction, deep focused work is rare skill. Trending heavily among students and professionals.",
+    "hashtags": "#psychologyofmoney #money #investing #wealth #financialfreedom",
+    "description": "Explores how behavior, emotions and personal experiences influence the way people earn, save and invest money.",
     "used": false
   },
   {
-    "title": "The Subtle Art of Not Giving a F*ck",
-    "author": "Mark Manson",
-    "theme": "counterintuitive living, priorities, mental health",
+    "title": "Rich Dad Poor Dad",
+    "author": "Robert Kiyosaki",
+    "theme": "financial literacy, assets, wealth building",
     "youtube_viability": "High",
-    "caption_style": "short casual honest",
+    "caption_style": "simple educational",
     "keywords": [
-      "priorities",
-      "life values",
-      "mental health",
-      "boundaries"
+      "rich dad poor dad",
+      "financial literacy",
+      "assets",
+      "wealth building"
     ],
-    "hashtags": "#subtleart #priorities #mentalhealthmatters #realtalk #lifeadvice",
-    "description": "Viral for refreshingly honest take on life. Cuts through toxic motivation culture. Gen Z loves counter-narrative approach.",
+    "hashtags": "#richdadpoordad #financialliteracy #money #wealth #investing",
+    "description": "A popular personal finance book that contrasts different approaches to money, assets, work and financial independence.",
     "used": false
   },
   {
-    "title": "Man's Search for Meaning",
-    "author": "Viktor Frankl",
-    "theme": "purpose, suffering, resilience, meaning in life",
+    "title": "Think and Grow Rich",
+    "author": "Napoleon Hill",
+    "theme": "success, mindset, goals, achievement",
     "youtube_viability": "High",
-    "caption_style": "long emotional reflective",
+    "caption_style": "motivational thoughtful",
     "keywords": [
-      "purpose",
-      "meaning",
-      "resilience",
-      "suffering",
-      "philosophy"
+      "think and grow rich",
+      "success mindset",
+      "goal setting",
+      "achievement"
     ],
-    "hashtags": "#meaningoflife #purpose #resilience #philosophy #stoicism",
-    "description": "Holocaust survivor's philosophy. Deep, emotional content. Perfect for late-night motivational videos. High watch time.",
+    "hashtags": "#thinkandgrowrich #success #mindset #goals #motivation",
+    "description": "A classic success book focused on desire, persistence, organized planning and the mindset behind achievement.",
     "used": false
   },
   {
-    "title": "Mindset",
-    "author": "Carol Dweck",
-    "theme": "growth mindset vs fixed mindset, learning, potential",
+    "title": "The 7 Habits of Highly Effective People",
+    "author": "Stephen R. Covey",
+    "theme": "effectiveness, leadership, personal growth",
     "youtube_viability": "High",
-    "caption_style": "short motivational",
+    "caption_style": "professional thoughtful",
     "keywords": [
-      "mindset",
-      "growth",
-      "learning",
-      "potential",
-      "psychology"
+      "7 habits",
+      "effectiveness",
+      "leadership",
+      "personal growth"
     ],
-    "hashtags": "#growthmindset #mindset #learning #potential #psychology",
-    "description": "Psychological research backing personal growth. Teachers and students love this. Educational + motivational combo = viral.",
-    "used": false
-  },
-  {
-    "title": "The 48 Laws of Power",
-    "author": "Robert Greene",
-    "theme": "social dynamics, power, influence, human nature",
-    "youtube_viability": "High",
-    "caption_style": "short dramatic storytelling",
-    "keywords": [
-      "power",
-      "influence",
-      "social dynamics",
-      "psychology",
-      "strategy"
-    ],
-    "hashtags": "#powerofinfluence #psychology #humanbehavior #strategy #socialdynamics",
-    "description": "Controversial but addictive. Each law makes people think differently. TikTok and YouTube explosion. Dark but engaging.",
-    "used": false
-  },
-  {
-    "title": "Can't Hurt Me",
-    "author": "David Goggins",
-    "theme": "mental toughness, extreme discipline, pushing limits",
-    "youtube_viability": "High",
-    "caption_style": "short intense motivational",
-    "keywords": [
-      "discipline",
-      "mental toughness",
-      "challenge",
-      "extreme",
-      "willpower"
-    ],
-    "hashtags": "#mentaltoughness #discipline #motivation #canthurtme #extremetraining",
-    "description": "Navy SEAL's raw story. Workout videos + motivation trending massively. Gym bros and motivation seekers flood comments.",
-    "used": false
-  },
-  {
-    "title": "Thinking, Fast and Slow",
-    "author": "Daniel Kahneman",
-    "theme": "cognitive biases, decision-making, psychology, human behavior",
-    "youtube_viability": "Medium",
-    "caption_style": "long analytical",
-    "keywords": [
-      "psychology",
-      "cognition",
-      "biases",
-      "decision-making",
-      "behavior"
-    ],
-    "hashtags": "#psychology #cognitivebias #decisionmaking #thinking #neuroscience",
-    "description": "Deep psychological insights. Trending among intellectuals. Requires patient viewers but very high engagement quality.",
+    "hashtags": "#7habits #effectiveness #leadership #personalgrowth #success",
+    "description": "A timeless framework for becoming more effective through personal responsibility, priorities, relationships and continuous growth.",
     "used": false
   },
   {
     "title": "The Power of Now",
     "author": "Eckhart Tolle",
-    "theme": "present moment, mindfulness, spiritual growth, anxiety reduction",
+    "theme": "presence, mindfulness, inner peace",
     "youtube_viability": "High",
-    "caption_style": "long spiritual reflective",
+    "caption_style": "calm philosophical",
     "keywords": [
+      "power of now",
       "mindfulness",
-      "spirituality",
       "presence",
-      "anxiety",
       "inner peace"
     ],
-    "hashtags": "#thepowerofnow #mindfulness #spirituality #innerpeace #meditation",
-    "description": "Meditation community loves this. Trending for anxiety relief. Aesthetic visuals + calm narration = algorithm gold.",
+    "hashtags": "#thepowerofnow #mindfulness #presence #innerpeace #selfawareness",
+    "description": "Encourages readers to escape excessive thinking about the past and future by learning to live more fully in the present moment.",
     "used": false
   },
   {
-    "title": "7 Habits of Highly Effective People",
-    "author": "Stephen Covey",
-    "theme": "productivity, character, principles, effectiveness",
+    "title": "How to Win Friends and Influence People",
+    "author": "Dale Carnegie",
+    "theme": "communication, relationships, social skills",
     "youtube_viability": "High",
-    "caption_style": "short practical step-by-step",
+    "caption_style": "practical conversational",
     "keywords": [
-      "productivity",
-      "habits",
-      "effectiveness",
-      "success",
-      "principles"
+      "communication skills",
+      "social skills",
+      "relationships",
+      "influence"
     ],
-    "hashtags": "#7habits #productivity #success #personaldevelopment #effectiveness",
-    "description": "Timeless classic. Used in corporate training. Trending for career + personal growth. Professionals keep rewatching.",
+    "hashtags": "#communication #socialskills #relationships #influence #personaldevelopment",
+    "description": "A classic guide to communicating effectively, building relationships and creating positive interactions with others.",
+    "used": false
+  },
+  {
+    "title": "The 48 Laws of Power",
+    "author": "Robert Greene",
+    "theme": "power, strategy, human behavior",
+    "youtube_viability": "High",
+    "caption_style": "dark strategic",
+    "keywords": [
+      "48 laws of power",
+      "power",
+      "strategy",
+      "human psychology"
+    ],
+    "hashtags": "#48lawsofpower #power #strategy #psychology #robertgreene",
+    "description": "Examines historical patterns of power, influence and strategy through lessons drawn from human behavior and political history.",
+    "used": false
+  },
+  {
+    "title": "Can't Hurt Me",
+    "author": "David Goggins",
+    "theme": "discipline, resilience, mental toughness",
+    "youtube_viability": "High",
+    "caption_style": "intense motivational",
+    "keywords": [
+      "cant hurt me",
+      "mental toughness",
+      "discipline",
+      "resilience"
+    ],
+    "hashtags": "#canthurtme #davidgoggins #discipline #mentaltoughness #motivation",
+    "description": "David Goggins shares his journey of overcoming hardship and developing extreme mental toughness through discipline and accountability.",
+    "used": false
+  },
+  {
+    "title": "The Alchemist",
+    "author": "Paulo Coelho",
+    "theme": "dreams, purpose, courage, destiny",
+    "youtube_viability": "High",
+    "caption_style": "emotional inspirational",
+    "keywords": [
+      "the alchemist",
+      "dreams",
+      "purpose",
+      "life lessons"
+    ],
+    "hashtags": "#thealchemist #dreams #purpose #lifelessons #paulocoelho",
+    "description": "A philosophical story about following your dreams, listening to your intuition and discovering meaning through the journey.",
+    "used": false
+  },
+  {
+    "title": "Ikigai",
+    "author": "Héctor García and Francesc Miralles",
+    "theme": "purpose, happiness, longevity, lifestyle",
+    "youtube_viability": "High",
+    "caption_style": "calm thoughtful",
+    "keywords": [
+      "ikigai",
+      "purpose in life",
+      "happiness",
+      "longevity"
+    ],
+    "hashtags": "#ikigai #purpose #happiness #longevity #mindfulness",
+    "description": "Explores the idea of finding purpose and creating a balanced lifestyle through meaningful work, relationships and daily habits.",
+    "used": false
+  },
+  {
+    "title": "The Mountain Is You",
+    "author": "Brianna Wiest",
+    "theme": "self-sabotage, emotional growth, self-awareness",
+    "youtube_viability": "High",
+    "caption_style": "emotional reflective",
+    "keywords": [
+      "self sabotage",
+      "emotional growth",
+      "self awareness",
+      "healing"
+    ],
+    "hashtags": "#themountainisyou #selfgrowth #selfawareness #healing #mindset",
+    "description": "Explores self-sabotage, emotional patterns and the inner barriers that can prevent people from creating the life they want.",
+    "used": false
+  },
+  {
+    "title": "Make Your Bed",
+    "author": "William H. McRaven",
+    "theme": "discipline, resilience, leadership, life lessons",
+    "youtube_viability": "High",
+    "caption_style": "short motivational",
+    "keywords": [
+      "make your bed",
+      "discipline",
+      "resilience",
+      "life lessons"
+    ],
+    "hashtags": "#makeyourbed #discipline #resilience #leadership #motivation",
+    "description": "Simple lessons inspired by Navy SEAL training that connect small daily actions with discipline, resilience and personal success.",
+    "used": false
+  },
+  {
+    "title": "The One Thing",
+    "author": "Gary Keller and Jay Papasan",
+    "theme": "focus, priorities, productivity",
+    "youtube_viability": "High",
+    "caption_style": "practical focused",
+    "keywords": [
+      "the one thing",
+      "focus",
+      "priorities",
+      "productivity"
+    ],
+    "hashtags": "#theonething #focus #productivity #priorities #success",
+    "description": "Teaches the power of focusing on the single most important task instead of spreading attention across too many priorities.",
+    "used": false
+  },
+  {
+    "title": "Essentialism",
+    "author": "Greg McKeown",
+    "theme": "simplicity, priorities, focus, productivity",
+    "youtube_viability": "High",
+    "caption_style": "minimal thoughtful",
+    "keywords": [
+      "essentialism",
+      "priorities",
+      "simplicity",
+      "focus"
+    ],
+    "hashtags": "#essentialism #focus #priorities #productivity #simplicity",
+    "description": "Shows how eliminating nonessential activities can help you focus your time and energy on what matters most.",
+    "used": false
+  },
+  {
+    "title": "The Power of Habit",
+    "author": "Charles Duhigg",
+    "theme": "habits, behavior, neuroscience, change",
+    "youtube_viability": "High",
+    "caption_style": "educational engaging",
+    "keywords": [
+      "power of habit",
+      "habit loop",
+      "behavior change",
+      "habits"
+    ],
+    "hashtags": "#powerofhabit #habits #behaviorchange #productivity #selfimprovement",
+    "description": "Explains how habits work through behavioral patterns and how understanding those patterns can help create lasting change.",
+    "used": false
+  },
+  {
+    "title": "Man's Search for Meaning",
+    "author": "Viktor E. Frankl",
+    "theme": "meaning, resilience, purpose, psychology",
+    "youtube_viability": "High",
+    "caption_style": "deep emotional",
+    "keywords": [
+      "mans search for meaning",
+      "purpose",
+      "resilience",
+      "psychology"
+    ],
+    "hashtags": "#manssearchformeaning #purpose #resilience #psychology #lifelessons",
+    "description": "A profound exploration of meaning, suffering and psychological resilience based on Viktor Frankl's experiences and ideas.",
+    "used": false
+  },
+  {
+    "title": "The 5 AM Club",
+    "author": "Robin Sharma",
+    "theme": "morning routine, productivity, discipline",
+    "youtube_viability": "High",
+    "caption_style": "motivational practical",
+    "keywords": [
+      "5 am club",
+      "morning routine",
+      "productivity",
+      "discipline"
+    ],
+    "hashtags": "#5amclub #morningroutine #productivity #discipline #success",
+    "description": "Presents an early-morning routine designed to improve focus, productivity, personal growth and daily performance.",
+    "used": false
+  },
+  {
+    "title": "Do Epic Shit",
+    "author": "Ankur Warikoo",
+    "theme": "self-growth, career, money, life decisions",
+    "youtube_viability": "High",
+    "caption_style": "short casual motivational",
+    "keywords": [
+      "do epic shit",
+      "self improvement",
+      "career",
+      "money mindset"
+    ],
+    "hashtags": "#doepicshit #ankurwarikoo #selfimprovement #careergrowth #mindset",
+    "description": "A collection of practical thoughts on career, money, relationships, habits and making better decisions in life.",
+    "used": false
+  },
+  {
+    "title": "The Courage to Be Disliked",
+    "author": "Ichiro Kishimi and Fumitake Koga",
+    "theme": "self-acceptance, freedom, relationships, psychology",
+    "youtube_viability": "High",
+    "caption_style": "philosophical conversational",
+    "keywords": [
+      "courage to be disliked",
+      "self acceptance",
+      "freedom",
+      "psychology"
+    ],
+    "hashtags": "#thecouragetobedisliked #psychology #selfacceptance #freedom #mindset",
+    "description": "Uses Adlerian psychology to explore freedom, self-acceptance, relationships and the courage to live according to your own values.",
+    "used": false
+  },
+  {
+    "title": "Limitless",
+    "author": "Jim Kwik",
+    "theme": "learning, memory, brain performance",
+    "youtube_viability": "High",
+    "caption_style": "energetic educational",
+    "keywords": [
+      "limitless",
+      "memory",
+      "learning",
+      "brain power"
+    ],
+    "hashtags": "#limitless #learning #memory #brainpower #productivity",
+    "description": "Offers techniques and mindset strategies for improving learning, memory, focus and mental performance.",
+    "used": false
+  },
+  {
+    "title": "Eat That Frog!",
+    "author": "Brian Tracy",
+    "theme": "productivity, procrastination, time management",
+    "youtube_viability": "High",
+    "caption_style": "short practical",
+    "keywords": [
+      "eat that frog",
+      "procrastination",
+      "time management",
+      "productivity"
+    ],
+    "hashtags": "#eatthatfrog #productivity #procrastination #timemanagement #focus",
+    "description": "A practical productivity guide focused on tackling important tasks first and overcoming procrastination.",
+    "used": false
+  },
+  {
+    "title": "The Millionaire Fastlane",
+    "author": "MJ DeMarco",
+    "theme": "entrepreneurship, wealth, business, financial freedom",
+    "youtube_viability": "High",
+    "caption_style": "bold practical",
+    "keywords": [
+      "millionaire fastlane",
+      "entrepreneurship",
+      "wealth",
+      "financial freedom"
+    ],
+    "hashtags": "#millionairefastlane #entrepreneurship #wealth #business #financialfreedom",
+    "description": "Challenges traditional ideas about wealth and discusses entrepreneurship, scalable businesses and financial independence.",
+    "used": false
+  },
+  {
+    "title": "The Compound Effect",
+    "author": "Darren Hardy",
+    "theme": "consistency, habits, success, discipline",
+    "youtube_viability": "High",
+    "caption_style": "motivational practical",
+    "keywords": [
+      "compound effect",
+      "consistency",
+      "discipline",
+      "success habits"
+    ],
+    "hashtags": "#compoundeffect #discipline #consistency #success #habits",
+    "description": "Explains how small choices repeated consistently can compound into significant results over time.",
+    "used": false
+  },
+  {
+    "title": "The Intelligent Investor",
+    "author": "Benjamin Graham",
+    "theme": "investing, value investing, financial discipline",
+    "youtube_viability": "High",
+    "caption_style": "educational serious",
+    "keywords": [
+      "intelligent investor",
+      "value investing",
+      "stock market",
+      "investing"
+    ],
+    "hashtags": "#intelligentinvestor #investing #valueinvesting #stockmarket #finance",
+    "description": "A classic investing book focused on value investing, disciplined decision-making and managing risk in the stock market.",
+    "used": false
+  },
+  {
+    "title": "Zero to One",
+    "author": "Peter Thiel and Blake Masters",
+    "theme": "startups, innovation, entrepreneurship, technology",
+    "youtube_viability": "High",
+    "caption_style": "strategic thought-provoking",
+    "keywords": [
+      "zero to one",
+      "startups",
+      "innovation",
+      "entrepreneurship"
+    ],
+    "hashtags": "#zerotoone #startups #innovation #entrepreneurship #business",
+    "description": "Explores how entrepreneurs can create new businesses and products by building something genuinely different rather than simply copying existing ideas.",
+    "used": false
+  },
+  {
+    "title": "The Laws of Human Nature",
+    "author": "Robert Greene",
+    "theme": "human behavior, psychology, self-awareness",
+    "youtube_viability": "High",
+    "caption_style": "dark psychological",
+    "keywords": [
+      "laws of human nature",
+      "human psychology",
+      "behavior",
+      "self awareness"
+    ],
+    "hashtags": "#lawsofhumannature #psychology #humanbehavior #selfawareness #robertgreene",
+    "description": "Explores recurring patterns in human behavior, emotions, motivations and social interactions to develop greater awareness of ourselves and others.",
+    "used": false
+  },
+  {
+    "title": "The Monk Who Sold His Ferrari",
+    "author": "Robin Sharma",
+    "theme": "purpose, discipline, spirituality, personal growth",
+    "youtube_viability": "High",
+    "caption_style": "emotional inspirational",
+    "keywords": [
+      "monk who sold his ferrari",
+      "personal growth",
+      "purpose",
+      "discipline"
+    ],
+    "hashtags": "#monkwhosoldhisferrari #personalgrowth #purpose #discipline #motivation",
+    "description": "A fictional story about a successful lawyer who transforms his life by seeking greater purpose, balance, discipline and inner peace.",
     "used": false
   }
 ]
