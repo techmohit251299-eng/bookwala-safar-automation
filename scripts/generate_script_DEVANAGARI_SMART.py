@@ -37,55 +37,26 @@ def extract_text(message):
     raise ValueError("❌ No text block found in Claude's response!")
 
 
-def auto_select_book():
+def load_selected_book():
     """
-    AUTO-SELECT BOOK from books.json
+    LOAD the book that select_book.py already picked.
 
-    Process:
-    1. Find first book with "used": false
-    2. Mark it "used": true
-    3. Save to selected_book.json
-    4. If all used, reset all to false (cycle restart)
+    NOTE: Book selection now happens ONLY in scripts/select_book.py, which
+    runs as its own step earlier in the GitHub Actions workflow. This
+    function just reads that result. It used to also run its own
+    auto_select_book() logic here, which caused a bug: every run would
+    select TWO books (one in select_book.py, then a second one here) -
+    the first book would get marked "used" and skipped without ever
+    getting a script/voice generated for it.
     """
 
-    print("\n📚 AUTO-SELECTING BOOK FROM ROTATION...")
+    print("\n📚 Loading selected book (chosen by select_book.py)...")
 
-    # Load all books
-    with open(BOOKS_FILE, "r", encoding="utf-8") as f:
-        books = json.load(f)
+    with open(SELECTED_BOOK_FILE, "r", encoding="utf-8") as f:
+        selected_book = json.load(f)
 
-    # Find first unused book
-    selected_book = None
-    selected_index = None
-
-    for idx, book in enumerate(books):
-        if not book.get("used", False):
-            selected_book = book
-            selected_index = idx
-            break
-
-    # If all used, reset cycle
-    if selected_book is None:
-        print("  ↻ All books used! Restarting cycle...")
-        for book in books:
-            book["used"] = False
-        selected_book = books[0]
-        selected_index = 0
-
-    # Mark as used
-    books[selected_index]["used"] = True
-
-    # Save updated books.json
-    with open(BOOKS_FILE, "w", encoding="utf-8") as f:
-        json.dump(books, f, ensure_ascii=False, indent=2)
-
-    # Save selected book
-    with open(SELECTED_BOOK_FILE, "w", encoding="utf-8") as f:
-        json.dump(selected_book, f, ensure_ascii=False, indent=2)
-
-    print(f"  ✅ Selected: {selected_book.get('title')}")
+    print(f"  ✅ Loaded: {selected_book.get('title')}")
     print(f"  Author: {selected_book.get('author')}")
-    print(f"  Book {selected_index + 1}/50 in rotation")
 
     return selected_book
 
@@ -343,7 +314,7 @@ def main():
         raise RuntimeError("❌ ANTHROPIC_API_KEY not set!")
 
     # AUTO-SELECT BOOK
-    book_data = auto_select_book()
+    book_data = load_selected_book()
 
     # Generate script
     print("\n✍️ Generating Devanagari script with emotion...")
