@@ -1,22 +1,15 @@
 """
-Script Generation - SMART HINDI/DEVANAGARI (CHUNKED, for full 12-15 min length)
+Script Generation - SMART HINDI/DEVANAGARI (2 CHUNKS ONLY, for full 12-15 min length)
 
 Features:
 1. Devanagari script (proper Hindi)
 2. English words mixed smartly (where needed), always standard/correct spelling
 3. Smart pauses (... for reflection, — for drama)
 4. Emotion through content + voice settings
-5. Book is LOADED from selected_book.json (select_book.py already chose it)
-6. Guaranteed "..." at the very start (fixes TTS mispronouncing first word)
-7. SECTION-BY-SECTION generation (like the Hinglish version) - this is the
-   fix for scripts coming out too short: Devanagari text uses far more
-   tokens per word than Roman/English text, so asking for a whole ~2000-word
-   script in ONE Claude call with a small max_tokens budget was cutting the
-   script off early (that's why voice.mp3 was only ~5 min instead of 12-15).
-   Generating section-by-section gives each part its own generous token
-   budget, and stitches them together with continuity context.
-8. Channel name ("Grow with Books") is explicitly welcomed near the start
-   of the hook section.
+5. Book is LOADED from selected_book.json
+6. Guaranteed "..." at the very start
+7. ONLY 2 CHUNKS (Part 1 and Part 2) - each chunk gets generous token budget
+8. INDIAN ACCENT + POWERFUL MOTIVATION STYLE throughout
 """
 
 import os
@@ -34,114 +27,81 @@ MODEL = "claude-sonnet-5"
 
 CHANNEL_NAME = "Grow with Books"
 
-# Section plan. Total ~2200-2600 words -> ~13-16 min narration at a calm/
-# serious pace, matching the target the Hinglish version uses.
+# ONLY 2 CHUNKS - each ~1300 words for total ~2600 words -> 12-15 min
 SECTIONS = [
     {
-        "name": "hook",
+        "name": "part_1_hook_insights",
         "instructions": (
-            "शक्तिशाली OPENING HOOK। सबसे पहले दर्शकों का ध्यान खींचो, फिर चैनल "
-            f'का नाम "{CHANNEL_NAME}" का गर्मजोशी से स्वागत करते हुए ज़िक्र करो '
-            "(जैसे: 'आपका स्वागत है Grow with Books में')। इसके बाद philosophical "
-            "tone में बताओ कि यह किताब अभी क्यों महत्वपूर्ण है।"
+            "🔥 POWERFUL OPENING - शक्तिशाली शुरुआत करो! सबसे पहले एक explosive hook "
+            f'लगाओ जो लोगों को जकड़ दे। फिर "{CHANNEL_NAME}" का enthusiastic स्वागत करो। '
+            "फिर इस किताब की कहानी बताओ - लेखक ने यह क्यों लिखी, यह अभी क्यों ज़रूरी है। "
+            "फिर INSIGHT #1 - पहला मुख्य विचार एक relatable example के साथ explain करो। "
+            "फिर INSIGHT #2 - दूसरा मुख्य विचार भी relatable example के साथ। "
+            "हर insight को POWERFUL बनाओ, motivation का जलवा दिखाओ।"
         ),
-        "target_words": 320,
+        "target_words": 1300,
     },
     {
-        "name": "story_context",
+        "name": "part_2_insights_transformation_cta",
         "instructions": (
-            "कहानी और संदर्भ। किताब की मुख्य कहानी/premise से परिचय कराओ और बताओ "
-            "लेखक ने यह क्यों लिखी। Emotional connection बनाओ।"
+            "🚀 FINAL PUNCH - INSIGHT #3 लगाओ - तीसरा बड़ा विचार powerful example के साथ। "
+            "फिर सभी insights को CONNECT करो - बताओ कि श्रोता के लिए कौन सा life transformation "
+            "possible है, उसका future कैसे बदल सकता है। फिर POWERFUL CALL TO ACTION - "
+            "subscribe/like को natural तरीके से motivate करो (robotic नहीं)। "
+            "Last line को एक POWERFUL, INSPIRING quote या statement से बंद करो।"
         ),
-        "target_words": 420,
-    },
-    {
-        "name": "insight_1",
-        "instructions": (
-            "मुख्य INSIGHT #1। किताब के पहले बड़े विचार पर गहराई से बात करो, "
-            "एक relatable example के साथ।"
-        ),
-        "target_words": 420,
-    },
-    {
-        "name": "insight_2",
-        "instructions": (
-            "मुख्य INSIGHT #2। दूसरे बड़े विचार पर गहराई से बात करो, एक relatable "
-            "example के साथ। यह insight 1 से अलग और distinct feel होना चाहिए।"
-        ),
-        "target_words": 420,
-    },
-    {
-        "name": "insight_3",
-        "instructions": (
-            "मुख्य INSIGHT #3। तीसरे बड़े विचार पर गहराई से बात करो, एक relatable "
-            "example के साथ। यह insight 1 और 2 दोनों से अलग और distinct feel होना चाहिए।"
-        ),
-        "target_words": 420,
-    },
-    {
-        "name": "transformation",
-        "instructions": (
-            "रूपांतरण संदेश। सभी insights को जोड़ो, और बताओ कि श्रोता के लिए कौन सा "
-            "बदलाव possible है।"
-        ),
-        "target_words": 320,
-    },
-    {
-        "name": "cta",
-        "instructions": (
-            "CALL TO ACTION। मज़बूत closing, action के लिए motivate करो, "
-            "subscribe/like का natural (robotic नहीं) तरीके से ज़िक्र करो।"
-        ),
-        "target_words": 220,
+        "target_words": 1300,
     },
 ]
 
-BASE_SYSTEM_PROMPT = f"""आप "{CHANNEL_NAME}" के लिए एक master narrator हैं।
+BASE_SYSTEM_PROMPT = f"""आप "{CHANNEL_NAME}" के लिए एक POWERFUL MOTIVATIONAL NARRATOR हैं।
 यह 2 मिलियन subscribers का YouTube channel है।
+
+🎤 VOICE & ACCENT RULES (बहुत ज़रूरी):
+✅ INDIAN ACCENT USE करो - natural, authentic Indian English/Hindi mix
+✅ Intonation: उतार-चढ़ाव के साथ, energetic, passionate
+✅ Delivery: Powerful, motivational, inspiring - लोगों को action लेने के लिए inspire करो
+✅ Tone: एक सीनियर philosopher जो harsh reality बताता है पर प्यार से
+✅ Pacing: कभी-कभी slow (important points के लिए), कभी quick (excitement के लिए)
+✅ Emotion: हर word में conviction होनी चाहिए
 
 भाषा नियम:
 ✅ मुख्य भाषा: Devanagari (proper Hindi)
-✅ Technical terms: English रखो (Transform, Breakthrough, Discipline)
+✅ Technical terms: English रखो (Transform, Breakthrough, Discipline, Mindset)
 ✅ Author names: Original रखो (Viktor Frankl, James Clear)
 ✅ Book names: Original रखो (Atomic Habits, Deep Work)
 ✅ Concepts: Hindi में समझाओ, फिर English term दो
-✅ Hindi/English का mix बिल्कुल natural रहने दो — कोई fixed ratio फॉलो मत करो,
-   जो भी sentence में स्वाभाविक लगे वही रखो
+✅ Hindi/English का mix बिल्कुल natural रहने दो
 
-English words की spelling (बहुत ज़रूरी):
-- English/technical words हमेशा उनकी STANDARD, DICTIONARY-CORRECT spelling में
-  लिखो (जैसे "Transform", "Breakthrough", "Discipline", "Mindset")
-- कभी भी phonetic, slang, या casual spelling मत use करो
-  (गलत: "Transfrom", "Bricthru", "Mindsett" — सही: "Transform", "Breakthrough")
-- Author names और book titles भी उनकी original/official spelling में ही लिखो
+English words की spelling (हमेशा CORRECT):
+- Standard, dictionary-correct spelling हमेशा
+- कभी phonetic, slang, या casual spelling नहीं
+- (सही: "Transform", "Breakthrough", "Discipline" | गलत: "Transfrom", "Bricthru")
 
-Pause indicators (emotion is in voice settings, not tags):
-- ... = चिंतन के लिए pause (reflection)
-- — = नाटकीय pause (dramatic moment)
-- ! = शक्तिशाली बिंदु (powerful point)
-- हर sentence का अंत उचित विराम चिन्ह से करो: Hindi वाक्यों के लिए "।" और
-  English/Hinglish वाक्यों के लिए "." — दोनों को सही जगह इस्तेमाल करो
-
-Voice सेटिंग्स (emotion के लिए):
-- Depth: गहरा, गंभीर
-- Power: शक्तिशाली, प्रेरणादायक
-- Calm: मापा हुआ, विचारशील
-- Age: 55+ साल का दार्शनिक
+Pause indicators (emotion is in voice settings + content):
+- ... = चिंतन, reflection
+- — = नाटकीय pause, dramatic moment
+- ! = शक्तिशाली बिंदु
+- हर sentence का अंत सही विराम चिन्ह से: "।" (Hindi) और "." (Hinglish)
 
 महत्वपूर्ण:
 - NO emotion tags like [serious], [pause]
 - Smart pauses only (... and —)
-- Professional broadcast quality, 2M subscriber channel level
-- आप एक लंबी, continuous script का सिर्फ ONE SECTION लिख रहे हैं। अगर यह
-  opening section नहीं है, तो दोबारा greeting/channel-intro मत दोहराओ —
-  पिछले section के जहां से रुका था वहीं से स्वाभाविक रूप से आगे बढ़ो
-  (context नीचे दिया जाएगा)।"""
+- Professional broadcast quality, 2M subscriber level
+- इस section से पहले कोई context दिया जाएगा - उसी से continue करो
+- अगर opening section नहीं है, तो greeting दोबारा मत करो
+
+🔥 MOTIVATION STYLE:
+- Direct, honest, no sugar-coating
+- Challenge the listener - कहो क्या change करना चाहिए
+- Real examples, relatable stories
+- Call them to action - "तुम कर सकते हो", "यह तुम्हारा समय है"
+- Inspire to take ACTION, not just listen
+- Powerful closing lines जो memory में रहें"""
 
 
 def extract_text(message):
-    """Safely pull the text block out of a Claude response, skipping any
-    ThinkingBlock (or other non-text blocks) that may come before it."""
+    """Safely pull the text block out of a Claude response."""
     for block in message.content:
         if block.type == "text":
             return block.text.strip()
@@ -149,15 +109,7 @@ def extract_text(message):
 
 
 def load_selected_book():
-    """
-    LOAD the book that select_book.py already picked.
-
-    NOTE: Book selection happens ONLY in scripts/select_book.py, which runs
-    as its own step earlier in the GitHub Actions workflow. This function
-    just reads that result - it does NOT select a book itself, to avoid the
-    double-selection bug (two books getting marked "used" in one run).
-    """
-
+    """Load the book that select_book.py already picked."""
     print("\n📚 Loading selected book (chosen by select_book.py)...")
 
     with open(SELECTED_BOOK_FILE, "r", encoding="utf-8") as f:
@@ -170,11 +122,7 @@ def load_selected_book():
 
 
 def ensure_starting_pause(script_text):
-    """
-    Guarantee the FULL script begins with '...' regardless of what Claude
-    wrote, so the TTS engine gets a tiny lead-in and the first real word is
-    pronounced correctly.
-    """
+    """Guarantee the FULL script begins with '...'"""
     stripped = script_text.lstrip()
     if stripped.startswith("..."):
         return stripped
@@ -187,21 +135,18 @@ def generate_section(section, book_data, previous_ending):
     continuity_note = ""
     if previous_ending:
         continuity_note = f"""
-Script अभी तक यहाँ तक पहुँची है (यहीं से आगे बढ़ो, इसे दोहराओ मत, और
-greeting से दोबारा शुरू मत करो):
+Script अभी तक यहाँ तक पहुँची है (यहीं से आगे बढ़ो, इसे दोहराओ मत):
 ---
 ...{previous_ending}
 ---
 """
     else:
         continuity_note = f"""
-यह script का सबसे पहला section है। सबसे पहला शब्द लिखने से पहले "..."
-ज़रूर लगाओ, और शुरुआत में ही "{CHANNEL_NAME}" चैनल का गर्मजोशी से स्वागत
-करते हुए ज़िक्र करो।
-"""
+यह script का पहला section है। सबसे पहला शब्द लिखने से पहले "..."
+ज़रूर लगाओ।"""
 
-    user_prompt = f"""इस किताब के लिए Devanagari (Hindi) script का
-"{section['name'].upper()}" section लिखो:
+    user_prompt = f"""इस किताब के लिए POWERFUL, MOTIVATIONAL Devanagari (Hindi) script
+का "{section['name'].upper()}" section लिखो:
 
 Book: {book_data.get('title', 'Unknown')}
 Author: {book_data.get('author', 'Unknown')}
@@ -210,16 +155,20 @@ Keywords: {', '.join(book_data.get('keywords', []))}
 
 Section brief: {section['instructions']}
 Target length: लगभग {section['target_words']} शब्द।
+
 {continuity_note}
-याद रखो: मुख्य भाषा Devanagari Hindi + natural English mix + सही विराम
-चिन्ह ("।" Hindi वाक्यों के लिए, "." English/Hinglish के लिए)।
-सिर्फ इस section का text लिखो - कोई header, कोई label, कोई meta commentary नहीं।"""
 
-    print(f"\n✍️  Generating section: {section['name']} (~{section['target_words']} words)...")
+याद रखो:
+- POWERFUL, MOTIVATIONAL tone - लोगों को inspire करो
+- INDIAN ACCENT + style
+- मुख्य भाषा Devanagari Hindi + natural English mix
+- सही विराम चिन्ह: "।" (Hindi) और "." (Hinglish)
+- सिर्फ इस section का text - कोई header, label, meta commentary नहीं"""
 
-    # Devanagari uses noticeably more tokens per word than Roman script, so
-    # budget generously - this is the key fix for scripts cutting off early.
-    max_tok = int(section['target_words'] * 4.5) + 300
+    print(f"\n✍️  Generating: {section['name']} (~{section['target_words']} words)...")
+
+    # Generous token budget for 2 chunks
+    max_tok = int(section['target_words'] * 5) + 400
 
     message = client.messages.create(
         model=MODEL,
@@ -232,11 +181,7 @@ Target length: लगभग {section['target_words']} शब्द।
 
 
 def generate_hindi_devanagari_script(book_data):
-    """
-    Generate the FULL Devanagari script, section by section, carrying
-    context forward so the ~2200-2600 word script stays consistent in
-    tone/flow across a 12-15 minute voice track.
-    """
+    """Generate the FULL script in only 2 CHUNKS."""
 
     full_script_parts = []
     previous_ending = ""
@@ -245,8 +190,8 @@ def generate_hindi_devanagari_script(book_data):
         section_text = generate_section(section, book_data, previous_ending)
         full_script_parts.append(section_text)
 
-        # carry forward last ~400 chars as continuity context for next section
-        previous_ending = section_text[-400:]
+        # carry forward last ~500 chars as continuity context
+        previous_ending = section_text[-500:]
 
     script_text = "\n\n".join(full_script_parts)
     script_text = ensure_starting_pause(script_text)
@@ -257,17 +202,17 @@ def main():
     """Main flow."""
 
     print("\n" + "=" * 70)
-    print("GROW WITH BOOKS - DEVANAGARI SCRIPT GENERATION")
+    print("GROW WITH BOOKS - DEVANAGARI SCRIPT (2 CHUNKS)")
     print("=" * 70)
 
     if not os.environ.get("ANTHROPIC_API_KEY"):
         raise RuntimeError("❌ ANTHROPIC_API_KEY not set!")
 
-    # Load the book select_book.py already chose (no re-selecting here)
+    # Load the book
     book_data = load_selected_book()
 
-    # Generate script - section by section
-    print("\n✍️ Generating Devanagari script (section-by-section)...")
+    # Generate script - ONLY 2 CHUNKS
+    print("\n🔥 Generating POWERFUL 12-15 min script (2 chunks only)...")
     script_text = generate_hindi_devanagari_script(book_data)
 
     # Save
@@ -284,7 +229,10 @@ def main():
         "character_count": len(script_text),
         "style": "DEVANAGARI_WITH_ENGLISH",
         "language": "Devanagari (Hindi) with smart English",
-        "emotion_handling": "Content-based + Voice settings",
+        "accent": "Indian English/Hindi",
+        "emotion_style": "POWERFUL_MOTIVATIONAL",
+        "chunks": 2,
+        "expected_duration": "12-15 minutes",
     }
 
     DATA_DIR.mkdir(exist_ok=True)
@@ -292,9 +240,10 @@ def main():
         json.dump(output_data, f, ensure_ascii=False, indent=2)
 
     print(f"  ✅ Saved: {SCRIPT_FILE}")
-    print(f"\n🎉 SUCCESS! Full-length Devanagari script ready!")
+    print(f"\n🔥 SUCCESS! 2-Chunk POWERFUL Script Ready!")
     print(f"  📊 Word count: {len(script_text.split())}")
-    print(f"  ⏱️  Expected duration: 12-15 minutes\n")
+    print(f"  ⏱️  Expected duration: 12-15 minutes")
+    print(f"  🎤 Style: Powerful Motivational + Indian Accent\n")
 
 
 if __name__ == "__main__":
