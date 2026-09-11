@@ -11,6 +11,7 @@ Features:
 7. Philosopher 55+ character
 8. Per-chunk "..." lead-in (each chunk is its own TTS API call, so each
    one gets a fresh warm-up pause - fixes mispronounced opening words)
+9. Hindi power indicator detection for smart pauses
 
 NO MAPPINGS - Just clean Hinglish!
 """
@@ -161,19 +162,54 @@ def ensure_chunk_pause(chunk_text):
 
 def detect_power_moment(text_segment):
     """
-    Detect powerful moments from punctuation/words.
+    Detect powerful moments from punctuation + Hindi/English words.
+    Smart emotion detection for both Devanagari and English text.
     Add longer pause after powerful statements.
     """
-
-    power_indicators = ['!', '???', '—', 'powerful', 'breakthrough', 'transform', 'unlock']
-
-    power_score = text_segment.count('!') * 2
-    power_score += text_segment.count('???')
-
-    for indicator in power_indicators:
-        if indicator in text_segment.lower():
+    
+    # English power indicators (for mixed text)
+    power_indicators_en = [
+        '!', '???', '—',
+        'powerful', 'breakthrough', 
+        'transform', 'unlock',
+        'extraordinary', 'amazing',
+        'incredible', 'revolutionary'
+    ]
+    
+    # Hindi/Devanagari power indicators
+    power_indicators_hi = [
+        '!', '???', '—',
+        'शक्तिशाली',       # Powerful
+        'सफलता',           # Breakthrough
+        'रूपांतरण',         # Transform
+        'असाधारण',         # Extraordinary
+        'महान',            # Great
+        'क्रांतिकारी',      # Revolutionary
+        'अविश्वसनीय',      # Incredible
+        'शानदार',          # Magnificent
+        'जीवन-परिवर्तनकारी', # Life-changing
+        'विस्मय',          # Amazing
+        'अद्भुत'           # Wonderful
+    ]
+    
+    power_score = 0
+    
+    # Punctuation scoring (multiple punctuation = strong emotion)
+    power_score += text_segment.count('!') * 2
+    power_score += text_segment.count('?') * 1.5
+    power_score += text_segment.count('—') * 1.5
+    
+    # English indicators
+    for indicator in power_indicators_en:
+        if indicator.lower() in text_segment.lower():
             power_score += 1
-
+    
+    # Hindi indicators
+    for indicator in power_indicators_hi:
+        if indicator in text_segment:
+            power_score += 1
+    
+    # Decision based on score
     if power_score >= 3:
         return PAUSE_DURATIONS["long"]    # 1000ms - Let it land!
     elif power_score >= 1:
@@ -207,7 +243,7 @@ def generate_deep_powerful_voice(script_text, voice_id):
 
     client = ElevenLabs(api_key=os.environ["ELEVENLABS_API_KEY"])
 
-    print("\n📝 Processing Hinglish script...")
+    print("\n📝 Processing script...")
     chunks = smart_chunk_text(script_text)
 
     print(f"\n🎙️ DEEP POWERFUL PHILOSOPHER VOICE")
@@ -226,12 +262,18 @@ def generate_deep_powerful_voice(script_text, voice_id):
     print(f"\n🎙️ TECHNICAL SETTINGS:")
     print(f"   Stability: 0.80 (high - consistent emotion)")
     print(f"   Similarity: 0.88 (very authentic)")
-    print(f"   Style: 0.30 (calmer, less dramatic)")
+    print(f"   Style: 0.30 (calmer, measured)")
     print(f"   Speaker Boost: OFF (natural delivery)")
+    print(f"\n⏱️  PAUSE STRATEGY:")
+    print(f"   Short pause: 300ms (quick breath)")
+    print(f"   Medium pause: 700ms (normal break)")
+    print(f"   Long pause: 1000ms (powerful moment)")
+    print(f"   Lead-in silence: 400ms (first chunk)")
     print(f"\n📏 Chunk strategy: 1800-3200 chars")
     print(f"   Large chunks = context preserved")
     print(f"   Natural narrative flow maintained")
     print(f"   Each chunk gets its own '...' lead-in pause")
+    print(f"   Smart pause detection: Hindi + English indicators")
     print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
 
     if len(chunks) == 0:
@@ -261,7 +303,7 @@ def generate_deep_powerful_voice(script_text, voice_id):
                 voice_settings=VoiceSettings(
                     stability=0.80,           # High consistency
                     similarity_boost=0.88,    # Very authentic
-                    style=0.30,               # Calmer, less dramatic - toned down from 0.40
+                    style=0.30,               # Calmer, measured tone
                     use_speaker_boost=False,  # Natural philosopher tone
                 ),
             )
@@ -272,7 +314,7 @@ def generate_deep_powerful_voice(script_text, voice_id):
 
             print(" ✅", flush=True)
 
-            # Smart pause based on power moments
+            # Smart pause based on power moments (Hindi + English detection)
             if idx < len(chunks):
                 pause_duration = detect_power_moment(chunk)
                 combined += AudioSegment.silent(duration=pause_duration)
@@ -299,6 +341,7 @@ def generate_deep_powerful_voice(script_text, voice_id):
     print(f"   ✅ CALM, measured delivery!")
     print(f"   ✅ Motivational energy throughout!")
     print(f"   ✅ Accurate Hinglish/Devanagari pronunciation!")
+    print(f"   ✅ Smart pauses (Hindi + English detection)!")
     print(f"   ✅ Professional 2M-subscriber quality!")
     print(f"\n🚀 Ready for YouTube!\n")
     print(f"{'━'*70}\n")
