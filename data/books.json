@@ -29,7 +29,7 @@
     ],
     "hashtags": "#richdadpoordad #financialliteracy #money #wealth #investing",
     "description": "A popular personal finance book that contrasts different approaches to money, assets, work and financial independence.",
-    "used": true
+    "used": false
   },
   {
     "title": "Think and Grow Rich",
@@ -45,7 +45,7 @@
     ],
     "hashtags": "#thinkandgrowrich #success #mindset #goals #motivation",
     "description": "A classic success book focused on desire, persistence, organized planning and the mindset behind achievement.",
-    "used": true
+    "used": false
   },
   {
     "title": "The 7 Habits of Highly Effective People",
@@ -61,7 +61,7 @@
     ],
     "hashtags": "#7habits #effectiveness #leadership #personalgrowth #success",
     "description": "A timeless framework for becoming more effective through personal responsibility, priorities, relationships and continuous growth.",
-    "used": true
+    "used": false
   },
   {
     "title": "The Power of Now",
@@ -77,7 +77,7 @@
     ],
     "hashtags": "#thepowerofnow #mindfulness #presence #innerpeace #selfawareness",
     "description": "Encourages readers to escape excessive thinking about the past and future by learning to live more fully in the present moment.",
-    "used": true
+    "used": false
   },
   {
     "title": "How to Win Friends and Influence People",
@@ -93,7 +93,7 @@
     ],
     "hashtags": "#communication #socialskills #relationships #influence #personaldevelopment",
     "description": "A classic guide to communicating effectively, building relationships and creating positive interactions with others.",
-    "used": true
+    "used": false
   },
   {
     "title": "The 48 Laws of Power",
@@ -109,7 +109,7 @@
     ],
     "hashtags": "#48lawsofpower #power #strategy #psychology #robertgreene",
     "description": "Examines historical patterns of power, influence and strategy through lessons drawn from human behavior and political history.",
-    "used": true
+    "used": false
   },
   {
     "title": "Can't Hurt Me",
@@ -125,7 +125,7 @@
     ],
     "hashtags": "#canthurtme #davidgoggins #discipline #mentaltoughness #motivation",
     "description": "David Goggins shares his journey of overcoming hardship and developing extreme mental toughness through discipline and accountability.",
-    "used": true
+    "used": false
   },
   {
     "title": "The Alchemist",
@@ -141,7 +141,7 @@
     ],
     "hashtags": "#thealchemist #dreams #purpose #lifelessons #paulocoelho",
     "description": "A philosophical story about following your dreams, listening to your intuition and discovering meaning through the journey.",
-    "used": true
+    "used": false
   },
   {
     "title": "Ikigai",
@@ -157,7 +157,7 @@
     ],
     "hashtags": "#ikigai #purpose #happiness #longevity #mindfulness",
     "description": "Explores the idea of finding purpose and creating a balanced lifestyle through meaningful work, relationships and daily habits.",
-    "used": true
+    "used": false
   },
   {
     "title": "The Mountain Is You",
@@ -173,7 +173,7 @@
     ],
     "hashtags": "#themountainisyou #selfgrowth #selfawareness #healing #mindset",
     "description": "Explores self-sabotage, emotional patterns and the inner barriers that can prevent people from creating the life they want.",
-    "used": true
+    "used": false
   },
   {
     "title": "Make Your Bed",
@@ -189,7 +189,7 @@
     ],
     "hashtags": "#makeyourbed #discipline #resilience #leadership #motivation",
     "description": "Simple lessons inspired by Navy SEAL training that connect small daily actions with discipline, resilience and personal success.",
-    "used": true
+    "used": false
   },
   {
     "title": "The One Thing",
@@ -205,7 +205,7 @@
     ],
     "hashtags": "#theonething #focus #productivity #priorities #success",
     "description": "Teaches the power of focusing on the single most important task instead of spreading attention across too many priorities.",
-    "used": true
+    "used": false
   },
   {
     "title": "Essentialism",
@@ -221,7 +221,7 @@
     ],
     "hashtags": "#essentialism #focus #priorities #productivity #simplicity",
     "description": "Shows how eliminating nonessential activities can help you focus your time and energy on what matters most.",
-    "used": true
+    "used": false
   },
   {
     "title": "The Power of Habit",
@@ -237,7 +237,7 @@
     ],
     "hashtags": "#powerofhabit #habits #behaviorchange #productivity #selfimprovement",
     "description": "Explains how habits work through behavioral patterns and how understanding those patterns can help create lasting change.",
-    "used": true
+    "used": false
   },
   {
     "title": "Man's Search for Meaning",
@@ -253,7 +253,7 @@
     ],
     "hashtags": "#manssearchformeaning #purpose #resilience #psychology #lifelessons",
     "description": "A profound exploration of meaning, suffering and psychological resilience based on Viktor Frankl's experiences and ideas.",
-    "used": true
+    "used": false
   },
   {
     "title": "The 5 AM Club",
@@ -269,7 +269,7 @@
     ],
     "hashtags": "#5amclub #morningroutine #productivity #discipline #success",
     "description": "Presents an early-morning routine designed to improve focus, productivity, personal growth and daily performance.",
-    "used": true
+    "used": false
   },
   {
     "title": "Do Epic Shit",
@@ -285,7 +285,7 @@
     ],
     "hashtags": "#doepicshit #ankurwarikoo #selfimprovement #careergrowth #mindset",
     "description": "A collection of practical thoughts on career, money, relationships, habits and making better decisions in life.",
-    "used": true
+    "used": false
   },
   {
     "title": "The Courage to Be Disliked",
@@ -301,7 +301,7 @@
     ],
     "hashtags": "#thecouragetobedisliked #psychology #selfacceptance #freedom #mindset",
     "description": "Uses Adlerian psychology to explore freedom, self-acceptance, relationships and the courage to live according to your own values.",
-    "used": true
+    "used": false
   },
   {
     "title": "Limitless",
@@ -317,7 +317,7 @@
     ],
     "hashtags": "#limitless #learning #memory #brainpower #productivity",
     "description": "Offers techniques and mindset strategies for improving learning, memory, focus and mental performance.",
-    "used": true
+    "used": false
   },
   {
     "title": "Eat That Frog!",
@@ -333,7 +333,7 @@
     ],
     "hashtags": "#eatthatfrog #productivity #procrastination #timemanagement #focus",
     "description": "A practical productivity guide focused on tackling important tasks first and overcoming procrastination.",
-    "used": true
+    "used": false
   },
   {
     "title": "The Millionaire Fastlane",
@@ -349,7 +349,7 @@
     ],
     "hashtags": "#millionairefastlane #entrepreneurship #wealth #business #financialfreedom",
     "description": "Challenges traditional ideas about wealth and discusses entrepreneurship, scalable businesses and financial independence.",
-    "used": true
+    "used": false
   },
   {
     "title": "The Compound Effect",
@@ -365,7 +365,7 @@
     ],
     "hashtags": "#compoundeffect #discipline #consistency #success #habits",
     "description": "Explains how small choices repeated consistently can compound into significant results over time.",
-    "used": true
+    "used": false
   },
   {
     "title": "The Intelligent Investor",
@@ -381,7 +381,7 @@
     ],
     "hashtags": "#intelligentinvestor #investing #valueinvesting #stockmarket #finance",
     "description": "A classic investing book focused on value investing, disciplined decision-making and managing risk in the stock market.",
-    "used": true
+    "used": false
   },
   {
     "title": "Zero to One",
@@ -397,7 +397,7 @@
     ],
     "hashtags": "#zerotoone #startups #innovation #entrepreneurship #business",
     "description": "Explores how entrepreneurs can create new businesses and products by building something genuinely different rather than simply copying existing ideas.",
-    "used": true
+    "used": false
   },
   {
     "title": "The Laws of Human Nature",
@@ -413,7 +413,7 @@
     ],
     "hashtags": "#lawsofhumannature #psychology #humanbehavior #selfawareness #robertgreene",
     "description": "Explores recurring patterns in human behavior, emotions, motivations and social interactions to develop greater awareness of ourselves and others.",
-    "used": true
+    "used": false
   },
   {
     "title": "The Monk Who Sold His Ferrari",
@@ -429,6 +429,6 @@
     ],
     "hashtags": "#monkwhosoldhisferrari #personalgrowth #purpose #discipline #motivation",
     "description": "A fictional story about a successful lawyer who transforms his life by seeking greater purpose, balance, discipline and inner peace.",
-    "used": true
+    "used": false
   }
 ]
